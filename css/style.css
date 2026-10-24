@@ -756,3 +756,4 @@ body:has(.typing-box.running:focus) :is(.site-header, .train-settings):hover { o
 .train-settings input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .list-src { margin: -.5rem 0 1rem; font-size: .8rem; }
 #panel-training:has(#ts-source option[value="custom"]:checked) .list-src { display: none; }
+.typing-box { margin-bottom: 1rem; }

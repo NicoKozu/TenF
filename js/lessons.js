@@ -25,7 +25,7 @@ const shuffle = (a) => {
 
 let wordlist = [];
 let ctxById = new Map(); // id → { lesson, index, known:Set, caps, knownCodes, freshCodes }
-let kb, panel, home, view, box, textEl, hintEl;
+let kb, panel, home, view, box, textEl;
 let cur = null; // { lesson, ctx, ex }
 let s = null;   // laufende Übung
 
@@ -35,7 +35,6 @@ export async function initLessons() {
   view = $('lesson-view');
   box = $('lv-box');
   textEl = $('lv-text');
-  hintEl = $('lv-next');
   kb = createKeyboard($('keyboard-lesson'));
   buildContexts();
   bindEvents();
@@ -403,17 +402,13 @@ function updateStats() {
 function updateCursor() {
   textEl.querySelector('.cur')?.classList.remove('cur');
   const span = s.spans[s.pos];
-  if (!span || s.done) { kb.clearHighlight(); hintEl.textContent = ''; return; }
+  if (!span || s.done) { kb.clearHighlight(); return; }
   span.classList.add('cur');
   const lh = parseFloat(getComputedStyle(textEl).lineHeight) || 40;
   textEl.style.transform = `translateY(${-Math.max(0, span.offsetTop - lh)}px)`;
 
   const ch = s.chars[s.pos];
-  const info = kb.highlightChar(ch);
-  if (!info) { hintEl.textContent = ''; return; }
-  const name = ch === ' ' ? 'Leertaste' : labelForCode(info.code);
-  const shift = info.shift ? ` + Umschalt ${info.shift === 'ShiftLeft' ? 'links' : 'rechts'}` : '';
-  hintEl.textContent = `Nächste Taste: ${name}${shift} – ${FINGERS[info.finger]}`;
+  kb.highlightChar(ch);
 }
 
 function finish() {
@@ -478,14 +473,18 @@ function showResult(r, passed, lessonJustDone) {
 
   out.replaceChildren(h, p, actions);
   out.hidden = false;
-  main.focus();
+  main.id = 'lesson-again';
 }
 
 // ----- Events -----
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return;
   if (e.key === 'Escape') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
-  if (s.done) return;
+  if (s.done) {
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); $('lesson-again')?.focus(); }
+    return;
+  }
   if (e.key.length !== 1) return;
   e.preventDefault();
   input(e.key, e.code);
@@ -508,6 +507,7 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
+    if (e.key === 'Enter' && !s.done && !t.matches?.('button, a, [role="tab"], label')) { e.preventDefault(); box.focus(); return; }
     if (s.done || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ' && t.matches?.('button, [role="tab"]')) return;
     box.focus();

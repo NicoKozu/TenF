@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261025002635">
+  <link rel="stylesheet" href="css/style.css?v=20261025003830">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,23 +31,23 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261025002635",
-      "./js/excel.js": "./js/excel.js?v=20261025002635",
-      "./js/history.js": "./js/history.js?v=20261025002635",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261025002635",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025002635",
-      "./js/lessons.js": "./js/lessons.js?v=20261025002635",
-      "./js/main.js": "./js/main.js?v=20261025002635",
-      "./js/settings.js": "./js/settings.js?v=20261025002635",
-      "./js/storage.js": "./js/storage.js?v=20261025002635",
-      "./js/themes.js": "./js/themes.js?v=20261025002635",
-      "./js/training.js": "./js/training.js?v=20261025002635",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261025002635",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261025002635"
+      "./js/caret.js": "./js/caret.js?v=20261025003830",
+      "./js/excel.js": "./js/excel.js?v=20261025003830",
+      "./js/history.js": "./js/history.js?v=20261025003830",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261025003830",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025003830",
+      "./js/lessons.js": "./js/lessons.js?v=20261025003830",
+      "./js/main.js": "./js/main.js?v=20261025003830",
+      "./js/settings.js": "./js/settings.js?v=20261025003830",
+      "./js/storage.js": "./js/storage.js?v=20261025003830",
+      "./js/themes.js": "./js/themes.js?v=20261025003830",
+      "./js/training.js": "./js/training.js?v=20261025003830",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261025003830",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261025003830"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261025002635"></script>
+  <script type="module" src="js/main.js?v=20261025003830"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -111,11 +111,10 @@
       </div>
 
       <div id="lv-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
-           aria-label="Übungstext – hier tippen" aria-describedby="lv-next">
+           aria-label="Übungstext – hier tippen">
         <div class="typing-view"><div id="lv-text" class="typing-text"></div></div>
-        <p class="typing-overlay" aria-hidden="true">Hier klicken oder einfach lostippen</p>
+        <p class="typing-overlay" aria-hidden="true">Enter drücken oder klicken zum Starten</p>
       </div>
-      <p id="lv-next" class="hint next-key"></p>
       <div id="lv-result" class="result" role="status" hidden></div>
       <p class="hint">Gedimmte Tasten kommen erst in späteren Lektionen, umrandete sind neu.</p>
       <div id="keyboard-lesson" class="keyboard-wrap"></div>
@@ -188,11 +187,10 @@
       </div>
 
       <div id="typing-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
-           aria-label="Übungstext – hier tippen" aria-describedby="next-key">
+           aria-label="Übungstext – hier tippen">
         <div class="typing-view"><div id="typing-text" class="typing-text"></div></div>
-        <p class="typing-overlay" aria-hidden="true">Hier klicken oder einfach lostippen</p>
+        <p class="typing-overlay" aria-hidden="true">Enter drücken oder klicken zum Starten</p>
       </div>
-      <p id="next-key" class="hint next-key"></p>
       <div id="train-result" class="result" role="status" hidden></div>
 
       <div id="keyboard-training" class="keyboard-wrap"></div>

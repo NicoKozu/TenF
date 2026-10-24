@@ -20,13 +20,12 @@ let loadErr = false;
 let cfg;
 let kb;
 let s; // Zustand der laufenden Übung
-let box, textEl, hintEl, panel;
+let box, textEl, panel;
 
 export async function initTraining() {
   panel = $('panel-training');
   box = $('typing-box');
   textEl = $('typing-text');
-  hintEl = $('next-key');
   cfg = { ...DEFAULTS, ...getSettings().training };
   if (!(cfg.list in LISTS)) cfg.list = DEFAULT_LIST;
   kb = createKeyboard($('keyboard-training'));
@@ -280,7 +279,7 @@ function back() {
 function updateCursor() {
   textEl.querySelector('.cur')?.classList.remove('cur');
   const cur = s.spans[s.pos];
-  if (!cur || s.done || s.empty) { kb.clearHighlight(); hintEl.textContent = ''; return; }
+  if (!cur || s.done || s.empty) { kb.clearHighlight(); return; }
   cur.classList.add('cur');
 
   // Aktuelle Zeile als zweite Zeile halten
@@ -288,12 +287,7 @@ function updateCursor() {
   const offset = Math.max(0, cur.offsetTop - lh);
   textEl.style.transform = `translateY(${-offset}px)`;
 
-  const ch = s.chars[s.pos];
-  const info = kb.highlightChar(ch);
-  if (!info) { hintEl.textContent = ''; return; }
-  const name = ch === ' ' ? 'Leertaste' : labelForCode(info.code);
-  const shift = info.shift ? ` + Umschalt ${info.shift === 'ShiftLeft' ? 'links' : 'rechts'}` : '';
-  hintEl.textContent = `Nächste Taste: ${name}${shift} – ${FINGERS[info.finger]}`;
+  kb.highlightChar(s.chars[s.pos]);
 }
 
 function calc() {
@@ -390,23 +384,29 @@ function showResult(r) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'btn';
-  btn.textContent = 'Nochmal (Esc)';
+  btn.textContent = 'Nochmal';
+  btn.id = 'train-again';
   btn.addEventListener('click', () => { reset(); box.focus(); });
 
   const note = document.createElement('p');
   note.className = 'hint';
-  note.textContent = 'Gespeichert im Verlauf (nur lokal in diesem Browser).';
+  note.textContent = 'Neue Runde: Tab + Leertaste oder Esc. Gespeichert im Verlauf (nur lokal in diesem Browser).';
 
   out.replaceChildren(h, dl, weakP, btn, note);
   out.hidden = false;
-  btn.focus();
 }
 
 // ----- Events -----
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return; // Browser-Kürzel nicht abfangen
   if (e.key === 'Escape') { e.preventDefault(); reset(); box.focus(); return; }
-  if (s.done || s.empty) return;
+  if (s.done) {
+    // Nach dem Ende: Leertaste tut nichts, Tab springt zu „Nochmal“ (dann Leertaste = neue Runde)
+    if (e.key === ' ') e.preventDefault();
+    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); $('train-again')?.focus(); }
+    return;
+  }
+  if (s.empty) return;
   if (e.key === 'Backspace') { e.preventDefault(); back(); return; }
   if (e.key.length !== 1) return; // Shift, Tab, Dead-Keys usw.
   e.preventDefault();
@@ -425,6 +425,8 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
+    // Enter blendet die Abdeckung aus und setzt den Fokus ins Tippfeld
+    if (e.key === 'Enter' && !s.done && !t.matches?.('button, a, [role="tab"], label')) { e.preventDefault(); box.focus(); return; }
     if (s.done || s.empty || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ' && t.matches?.('button, [role="tab"]')) return; // Leertaste aktiviert Buttons
     box.focus();
