@@ -3,7 +3,7 @@ import { writeXlsx, readXlsx, fromSerial, STYLE } from './xlsx.js';
 import { labelForCode, codeForLabel, FINGERS } from './keyboard.js';
 
 const SHEET = 'Sessions';
-const FOCUS = { all: 'Alle Tasten', home: 'Grundreihe', 'home-top': 'Grund + oben', 'home-bottom': 'Grund + unten' };
+const FOCUS = { all: 'Alle Tasten', home: 'Grundreihe', 'home-top': 'Grund + oben', 'home-bottom': 'Grund + unten', custom: 'Eigener Text' };
 const MODE = { training: 'Training' };
 
 // [Überschrift, Breite, Stil]
@@ -19,6 +19,7 @@ const yesNo = (b) => (b ? 'Ja' : 'Nein');
 const round1 = (n) => Math.round(n * 10) / 10;
 
 function lengthLabel(l = '') {
+  if (l === 'full') return 'Ganzer Text';
   const n = Number(l.slice(1));
   return l[0] === 't' ? `${n / 60} Min` : l[0] === 'w' ? `${n} Wörter` : '';
 }
@@ -26,6 +27,7 @@ function lengthLabel(l = '') {
 function parseLength(v) {
   const s = String(v ?? '').trim();
   if (/^[tw]\d+$/.test(s)) return s;
+  if (s === 'full' || /^ganzer text$/i.test(s)) return 'full';
   const n = parseFloat(s.replace(',', '.'));
   if (!Number.isFinite(n)) return undefined;
   if (/min/i.test(s)) return 't' + Math.round(n * 60);
@@ -160,6 +162,7 @@ export function xlsxToSessions(buf) {
     const focus = reverse(FOCUS, get(row, 'Fokus')) ?? 'all';
     const fingerTxt = String(get(row, 'Finger') ?? '').trim();
     const config = {
+      ...(focus === 'custom' ? { source: 'custom' } : {}),
       length, focus,
       finger: fingerTxt && fingerTxt.toLowerCase() !== 'alle' ? fingerByName(fingerTxt) ?? 'all' : 'all',
       caps: parseBool(get(row, 'Großschreibung')),

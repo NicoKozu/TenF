@@ -10,7 +10,7 @@ const dShort = new Intl.DateTimeFormat('de-DE', { day: '2-digit', month: '2-digi
 const WEAK_WINDOW = 20; // Sessions für die Schwachstellen-Analyse
 const MIN_HITS = 5;     // Mindestanschläge, damit eine Fehlerquote zählt
 const PAGE = 20;
-const FOCUS_LABEL = { all: 'Alle Tasten', home: 'Grundreihe', 'home-top': 'Grund + oben', 'home-bottom': 'Grund + unten' };
+const FOCUS_LABEL = { all: 'Alle Tasten', home: 'Grundreihe', 'home-top': 'Grund + oben', 'home-bottom': 'Grund + unten', custom: 'Eigener Text' };
 
 let panel, heatKb, chart = null, showAll = false, dirty = true;
 
@@ -42,6 +42,7 @@ function fmtDur(sec) {
 
 function modeLabel(cfg = {}) {
   const l = cfg.length ?? '';
+  if (l === 'full') return 'Ganzer Text';
   const n = Number(l.slice(1));
   return l[0] === 't' ? `${n / 60} Min` : l[0] === 'w' ? `${n} Wörter` : '–';
 }

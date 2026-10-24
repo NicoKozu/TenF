@@ -1,35 +1,8 @@
 import { createKeyboard, renderLegend } from './keyboard.js';
-import { getSettings, saveSettings } from './storage.js';
+import { initSettings } from './settings.js';
 import { initTraining } from './training.js';
 import { initHistory } from './history.js';
 import { initLessons } from './lessons.js';
-
-// ----- Theme -----
-const THEMES = ['system', 'light', 'dark'];
-const THEME_LABEL = { system: 'System', light: 'Hell', dark: 'Dunkel' };
-
-function applyTheme(theme) {
-  const root = document.documentElement;
-  if (theme === 'system') root.removeAttribute('data-theme');
-  else root.dataset.theme = theme;
-  const btn = document.getElementById('theme-toggle');
-  btn.setAttribute('aria-label', `Farbschema: ${THEME_LABEL[theme]} (klicken zum Wechseln)`);
-  btn.title = `Farbschema: ${THEME_LABEL[theme]}`;
-  window.dispatchEvent(new Event('themechange'));
-}
-
-function initTheme() {
-  applyTheme(getSettings().theme);
-  document.getElementById('theme-toggle').addEventListener('click', () => {
-    const cur = getSettings().theme;
-    const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
-    saveSettings({ theme: next });
-    applyTheme(next);
-  });
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (getSettings().theme === 'system') window.dispatchEvent(new Event('themechange'));
-  });
-}
 
 // ----- Tabs (WAI-ARIA Tabs-Pattern) -----
 function initTabs() {
@@ -78,7 +51,7 @@ function initLearnKeyboard() {
   window.addEventListener('blur', () => kb.releaseAll());
 }
 
-initTheme();
+initSettings();
 initLearnKeyboard();
 initTabs();
 initLessons();

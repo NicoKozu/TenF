@@ -6,7 +6,9 @@ const KEYS = { settings: 'settings', sessions: 'sessions', lessons: 'lessons' };
 const DATA_VERSION = 1;
 
 const DEFAULT_SETTINGS = {
-  theme: 'system', // 'system' | 'light' | 'dark'
+  theme: 'system', // 'system' | 'light' | 'dark' | 'black' | 'beige' | 'lila'
+  sizes: { ui: 100, text: 100, kb: 100 }, // Prozent
+  hideTrainKb: false,
   layout: 'de-qwertz',
 };
 

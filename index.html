@@ -6,6 +6,19 @@
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Design und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
+    try {
+      const s = JSON.parse(localStorage.getItem('tenf:settings') || '{}');
+      const r = document.documentElement;
+      if (s.theme && s.theme !== 'system') r.dataset.theme = s.theme;
+      const z = s.sizes || {};
+      if (z.ui) r.style.setProperty('--ui-scale', z.ui / 100);
+      if (z.text) r.style.setProperty('--type-scale', z.text / 100);
+      if (z.kb) r.style.setProperty('--kb-scale', z.kb / 100);
+      if (s.hideTrainKb) r.classList.add('hide-train-kb');
+    } catch (e) { /* ignorieren */ }
+  </script>
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
@@ -17,6 +30,7 @@
       <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
       <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="false" tabindex="-1">Training</button>
       <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
+      <button role="tab" id="tab-einstellungen" aria-controls="panel-einstellungen" aria-selected="false" tabindex="-1">Einstellungen</button>
     </nav>
     <button id="theme-toggle" class="icon-btn" type="button" aria-label="Farbschema wechseln">◐</button>
   </header>
@@ -80,6 +94,12 @@
     <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0" hidden>
       <h2>Training</h2>
       <form id="train-settings" class="train-settings" aria-label="Trainingseinstellungen">
+        <label>Modus
+          <select id="ts-source">
+            <option value="words">Zufällige Wörter</option>
+            <option value="custom">Eigener Text</option>
+          </select>
+        </label>
         <label>Länge
           <select id="ts-length">
             <optgroup label="Zeit">
@@ -92,9 +112,10 @@
               <option value="w50">50 Wörter</option>
               <option value="w100">100 Wörter</option>
             </optgroup>
+            <option value="full">Ganzer Text</option>
           </select>
         </label>
-        <label>Fokus
+        <label class="words-only">Fokus
           <select id="ts-focus">
             <option value="all">Alle Tasten</option>
             <option value="home">Grundreihe</option>
@@ -102,12 +123,22 @@
             <option value="home-bottom">Grund- + untere Reihe</option>
           </select>
         </label>
-        <label>Finger
+        <label class="words-only">Finger
           <select id="ts-finger"></select>
         </label>
-        <label class="check"><input type="checkbox" id="ts-caps"> Großschreibung</label>
+        <label class="check words-only"><input type="checkbox" id="ts-caps"> Großschreibung</label>
         <label class="check"><input type="checkbox" id="ts-strict"> Bei Fehler stoppen</label>
         <button type="button" id="ts-restart" class="btn">Neu starten (Esc)</button>
+        <div id="ts-custom-wrap" class="custom-wrap" hidden>
+          <label for="ts-custom">Dein Text</label>
+          <textarea id="ts-custom" rows="4" maxlength="5000" spellcheck="false"
+                    placeholder="Text hier einfügen oder eintippen, z. B. einen Absatz aus einem Buch oder eine E-Mail …"
+                    aria-describedby="ts-custom-hint"></textarea>
+          <div class="custom-actions">
+            <button type="button" id="ts-custom-apply" class="btn primary">Text übernehmen</button>
+            <span id="ts-custom-hint" class="hint">Zeilenumbrüche werden zu Leerzeichen, typografische Anführungszeichen und Striche zu tippbaren Zeichen. Der Text bleibt nur in diesem Browser.</span>
+          </div>
+        </div>
       </form>
 
       <div class="stats" role="group" aria-label="Live-Werte">
@@ -191,6 +222,41 @@
         <button type="button" id="hist-clear" class="btn danger">Verlauf löschen</button>
       </div>
       <p id="hist-msg" class="hint msg" role="status"></p>
+    </section>
+
+    <section role="tabpanel" id="panel-einstellungen" aria-labelledby="tab-einstellungen" tabindex="0" hidden>
+      <h2>Einstellungen</h2>
+
+      <fieldset class="set-group">
+        <legend>Design</legend>
+        <div id="theme-picker" class="theme-picker"></div>
+      </fieldset>
+
+      <fieldset class="set-group">
+        <legend>Größe</legend>
+        <div class="size-grid">
+          <label for="set-ui">Oberfläche (Schrift, Buttons, Abstände)</label>
+          <input type="range" id="set-ui" min="80" max="150" step="5" data-key="ui">
+          <output for="set-ui" id="set-ui-out"></output>
+
+          <label for="set-text">Text im Tippfeld</label>
+          <input type="range" id="set-text" min="70" max="200" step="10" data-key="text">
+          <output for="set-text" id="set-text-out"></output>
+
+          <label for="set-kb">Virtuelle Tastatur</label>
+          <input type="range" id="set-kb" min="60" max="150" step="5" data-key="kb">
+          <output for="set-kb" id="set-kb-out"></output>
+        </div>
+        <label class="check set-check"><input type="checkbox" id="set-kb-hide"> Virtuelle Tastatur im Training ausblenden (blind üben)</label>
+        <p class="hint">Vorschau:</p>
+        <div class="typing-box sample" aria-hidden="true">
+          <div class="typing-text"><span class="ch ok">Franz jagt im </span><span class="ch cur">k</span>omplett verwahrlosten Taxi quer durch Bayern.</div>
+        </div>
+        <div class="data-actions set-actions">
+          <button type="button" id="set-reset" class="btn">Standardgrößen wiederherstellen</button>
+        </div>
+      </fieldset>
+      <p class="hint">Einstellungen werden nur in diesem Browser gespeichert.</p>
     </section>
   </main>
 

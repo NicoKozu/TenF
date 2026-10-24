@@ -9,7 +9,8 @@ const FOCUS_ROWS = {
   'home-top': ['home', 'top'],
   'home-bottom': ['home', 'bottom'],
 };
-const DEFAULTS = { length: 't60', focus: 'all', finger: 'all', caps: true, strict: false };
+const DEFAULTS = { source: 'words', length: 't60', focus: 'all', finger: 'all', caps: true, strict: false, customText: '' };
+const CUSTOM_MAX = 5000;
 const MIN_REAL_WORDS = 20; // darunter werden Übungs-Silben beigemischt
 
 const $ = (id) => document.getElementById(id);
@@ -52,29 +53,68 @@ function setupForm() {
     el.value = val;
     if (el.value === '') el.value = def;
   };
+  set('ts-source', cfg.source, DEFAULTS.source);
   set('ts-length', cfg.length, DEFAULTS.length);
   set('ts-focus', cfg.focus, DEFAULTS.focus);
   set('ts-finger', cfg.finger, DEFAULTS.finger);
   $('ts-caps').checked = cfg.caps;
   $('ts-strict').checked = cfg.strict;
+  $('ts-custom').value = cfg.customText ?? '';
+  syncForm();
+  cfg.length = $('ts-length').value;
 
-  $('train-settings').addEventListener('change', () => {
+  const apply = (e) => {
+    // Beim Moduswechsel passende Standardlänge wählen
+    if (e?.target?.id === 'ts-source') $('ts-length').value = $('ts-source').value === 'custom' ? 'full' : DEFAULTS.length;
     cfg = {
+      source: $('ts-source').value,
       length: $('ts-length').value,
       focus: $('ts-focus').value,
       finger: $('ts-finger').value,
       caps: $('ts-caps').checked,
       strict: $('ts-strict').checked,
+      customText: $('ts-custom').value.slice(0, CUSTOM_MAX),
     };
+    syncForm();
+    cfg.length = $('ts-length').value;
     saveSettings({ training: cfg });
     reset();
-  });
+  };
+  $('train-settings').addEventListener('change', apply);
+  $('ts-custom-apply').addEventListener('click', () => { apply(); box.focus(); });
   $('train-settings').addEventListener('submit', (e) => e.preventDefault());
   $('ts-restart').addEventListener('click', () => { reset(); box.focus(); });
 }
 
+// Modusabhängige Felder ein-/ausblenden, ungültige Länge korrigieren
+function syncForm() {
+  const custom = $('ts-source').value === 'custom';
+  document.querySelectorAll('#train-settings .words-only').forEach((el) => { el.hidden = custom; });
+  $('ts-custom-wrap').hidden = !custom;
+  const len = $('ts-length');
+  for (const opt of len.options) opt.disabled = custom ? opt.value[0] === 'w' : opt.value === 'full';
+  $('ts-length').querySelector('option[value="full"]').hidden = !custom;
+  if (len.selectedOptions[0]?.disabled) len.value = custom ? 'full' : DEFAULTS.length;
+}
+
+// ----- Eigener Text -----
+function customWords() {
+  return (cfg.customText ?? '')
+    .replace(/[\u201C\u201D\u201E\u201F\u00AB\u00BB\u2033]/g, '"')
+    .replace(/[\u2018\u2019\u201A\u201B\u2039\u203A\u00B4\u0060]/g, "'")
+    .replace(/[\u2010-\u2015\u2212]/g, '-')
+    .replace(/\u2026/g, '...')
+    .split(/\s+/)
+    .filter(Boolean);
+}
+
 // ----- Wortgenerator -----
 function makeGenerator() {
+  if (cfg.source === 'custom') {
+    const words = customWords();
+    let i = 0;
+    return () => words[i++ % words.length];
+  }
   const rows = FOCUS_ROWS[cfg.focus] ?? null;
   const allowed = new Set((rows ?? Object.keys(ROW_CHARS)).flatMap((r) => [...ROW_CHARS[r]]));
   let fingerChars = null;
@@ -116,8 +156,11 @@ function makeGenerator() {
 // ----- Ablauf -----
 function reset() {
   clearInterval(s?.timer);
-  const type = cfg.length[0]; // 't' = Zeit, 'w' = Wörter
-  const n = Number(cfg.length.slice(1));
+  const custom = cfg.source === 'custom';
+  const words = custom ? customWords().length : 0;
+  const full = custom && cfg.length === 'full';
+  const type = full ? 'w' : cfg.length[0]; // 't' = Zeit, 'w' = Wörter
+  const n = full ? words : Number(cfg.length.slice(1));
   s = {
     type, n, gen: makeGenerator(),
     chars: [], spans: [], typed: [], pos: 0,
@@ -127,7 +170,12 @@ function reset() {
   };
   textEl.replaceChildren();
   textEl.style.transform = '';
-  appendWords(type === 'w' ? n : 40);
+  s.empty = custom && words === 0;
+  if (s.empty) {
+    textEl.textContent = 'Gib oben deinen eigenen Text ein und klick auf „Text übernehmen“.';
+  } else {
+    appendWords(type === 'w' ? n : 40);
+  }
   $('st-words-wrap').hidden = type !== 'w';
   $('train-result').replaceChildren();
   $('train-result').hidden = true;
@@ -224,7 +272,7 @@ function back() {
 function updateCursor() {
   textEl.querySelector('.cur')?.classList.remove('cur');
   const cur = s.spans[s.pos];
-  if (!cur || s.done) { kb.clearHighlight(); hintEl.textContent = ''; return; }
+  if (!cur || s.done || s.empty) { kb.clearHighlight(); hintEl.textContent = ''; return; }
   cur.classList.add('cur');
 
   // Aktuelle Zeile als zweite Zeile halten
@@ -278,9 +326,13 @@ function finish() {
   if (s.type === 'w') $('st-words').textContent = `${s.n}/${s.n}`;
 
   if (s.strokes > 0) {
+    const { customText, ...rest } = cfg;
+    const config = cfg.source === 'custom'
+      ? { source: 'custom', length: cfg.length, focus: 'custom', strict: cfg.strict }
+      : { ...rest };
     addSession({
       mode: 'training',
-      config: { ...cfg },
+      config,
       durationSec: Math.round(r.sec),
       wpm: r.wpm,
       accuracy: r.accuracy,
@@ -347,7 +399,7 @@ function showResult(r) {
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return; // Browser-Kürzel nicht abfangen
   if (e.key === 'Escape') { e.preventDefault(); reset(); box.focus(); return; }
-  if (s.done) return;
+  if (s.done || s.empty) return;
   if (e.key === 'Backspace') { e.preventDefault(); back(); return; }
   if (e.key.length !== 1) return; // Shift, Tab, Dead-Keys usw.
   e.preventDefault();
@@ -366,7 +418,7 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
-    if (s.done || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
+    if (s.done || s.empty || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ' && t.matches?.('button, [role="tab"]')) return; // Leertaste aktiviert Buttons
     box.focus();
     onKey(e);
