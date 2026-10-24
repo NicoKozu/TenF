@@ -1,5 +1,6 @@
 // Verlauf & Statistik: Kennzahlen, Diagramm, Schwachstellen, Session-Liste, Export/Import.
 import { createKeyboard, labelForCode, FINGERS } from './keyboard.js';
+import { listName, lengthLabel } from './wordlists.js';
 import { getSessions, deleteSession, clearSessions, exportData, importData, importSessions } from './storage.js';
 
 const $ = (id) => document.getElementById(id);
@@ -41,13 +42,12 @@ function fmtDur(sec) {
 }
 
 function modeLabel(cfg = {}) {
-  const l = cfg.length ?? '';
-  if (l === 'full') return 'Ganzer Text';
-  const n = Number(l.slice(1));
-  return l[0] === 't' ? `${n / 60} Min` : l[0] === 'w' ? `${n} Wörter` : '–';
+  return lengthLabel(cfg.length) || '–';
 }
 
 function focusLabel(cfg = {}) {
+  if (cfg.source === 'custom' || cfg.focus === 'custom') return 'Eigener Text';
+  if (cfg.list) return listName(cfg.list) + (cfg.caps === false ? ' (klein)' : '');
   const parts = [FOCUS_LABEL[cfg.focus] ?? 'Alle Tasten'];
   if (cfg.finger && cfg.finger !== 'all') parts.push(FINGERS[cfg.finger]);
   return parts.join(', ');

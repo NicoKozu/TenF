@@ -743,3 +743,16 @@ body:has(.typing-box.running:focus) :is(.site-header, .train-settings):hover { o
   .size-grid { grid-template-columns: 1fr 3.5rem; }
   .size-grid label { grid-column: 1 / -1; margin-bottom: -.5rem; }
 }
+
+/* ===== Training: Wortliste & eigene Länge ===== */
+.len-custom { display: flex; gap: .75rem; align-items: flex-end; }
+.len-custom[hidden] { display: none; }
+.train-settings input[type="number"] {
+  width: 6.5rem; font: inherit; font-size: .95rem; line-height: 1.6; padding: .4rem .9rem;
+  color: var(--text); background: var(--glass-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+  box-shadow: inset 0 1px 0 var(--hl);
+}
+.train-settings input[type="number"]:hover { border-color: var(--accent); }
+.train-settings input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.list-src { margin: -.5rem 0 1rem; font-size: .8rem; }
+#panel-training:has(#ts-source option[value="custom"]:checked) .list-src { display: none; }

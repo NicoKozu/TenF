@@ -1,23 +1,22 @@
-// Trainingsmodus: zufällige Wörter abtippen, Live-Auswertung, Session speichern.
+// Trainingsmodus: Wörter aus einer Wortliste abtippen, Live-Auswertung, Session speichern.
 import { createKeyboard, keyForChar, labelForCode, fingerForCode, FINGERS } from './keyboard.js';
 import { getSettings, saveSettings, addSession } from './storage.js';
+import { LISTS, LANG_NAMES, DEFAULT_LIST, loadList } from './wordlists.js';
 
-const ROW_CHARS = { home: 'asdfghjklöä', top: 'qwertzuiopü', bottom: 'yxcvbnm' };
-const FOCUS_ROWS = {
-  all: null,
-  home: ['home'],
-  'home-top': ['home', 'top'],
-  'home-bottom': ['home', 'bottom'],
+const DEFAULTS = {
+  source: 'words', list: DEFAULT_LIST, length: 't60', customLen: { n: 2, unit: 'min' },
+  caps: true, strict: false, customText: '',
 };
-const DEFAULTS = { source: 'words', length: 't60', focus: 'all', finger: 'all', caps: true, strict: false, customText: '' };
 const CUSTOM_MAX = 5000;
-const MIN_REAL_WORDS = 20; // darunter werden Übungs-Silben beigemischt
+const LEN_LIMITS = { sec: [5, 3600], min: [1, 60], words: [5, 1000] };
 
 const $ = (id) => document.getElementById(id);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const inc = (obj, k) => { obj[k] = (obj[k] || 0) + 1; };
+const clamp = (v, [min, max]) => Math.min(max, Math.max(min, Math.round(+v) || min));
 
 let wordlist = [];
+let loadErr = false;
 let cfg;
 let kb;
 let s; // Zustand der laufenden Übung
@@ -29,34 +28,46 @@ export async function initTraining() {
   textEl = $('typing-text');
   hintEl = $('next-key');
   cfg = { ...DEFAULTS, ...getSettings().training };
+  if (!(cfg.list in LISTS)) cfg.list = DEFAULT_LIST;
   kb = createKeyboard($('keyboard-training'));
   setupForm();
   bindEvents();
+  await useList(cfg.list);
+}
+
+async function useList(id) {
+  textEl.textContent = 'Wortliste wird geladen …';
   try {
-    const res = await fetch('data/wordlist-de.json');
-    wordlist = (await res.json()).words ?? [];
+    wordlist = await loadList(id);
+    loadErr = false;
   } catch {
-    wordlist = []; // Fallback: nur Übungs-Silben
+    wordlist = [];
+    loadErr = true;
   }
   reset();
 }
 
 // ----- Einstellungen -----
 function setupForm() {
-  const finger = $('ts-finger');
-  finger.append(
-    new Option('Alle Finger', 'all'),
-    ...Object.entries(FINGERS).filter(([k]) => k !== 'th').map(([k, v]) => new Option(v, k)),
-  );
+  const list = $('ts-list');
+  for (const [lang, name] of Object.entries(LANG_NAMES)) {
+    const group = document.createElement('optgroup');
+    group.label = name;
+    for (const [id, l] of Object.entries(LISTS)) {
+      if (l.lang === lang) group.append(new Option(l.name, id));
+    }
+    list.append(group);
+  }
   const set = (id, val, def) => {
     const el = $(id);
     el.value = val;
     if (el.value === '') el.value = def;
   };
   set('ts-source', cfg.source, DEFAULTS.source);
+  set('ts-list', cfg.list, DEFAULTS.list);
   set('ts-length', cfg.length, DEFAULTS.length);
-  set('ts-focus', cfg.focus, DEFAULTS.focus);
-  set('ts-finger', cfg.finger, DEFAULTS.finger);
+  set('ts-len-unit', cfg.customLen?.unit, DEFAULTS.customLen.unit);
+  $('ts-len-n').value = cfg.customLen?.n ?? DEFAULTS.customLen.n;
   $('ts-caps').checked = cfg.caps;
   $('ts-strict').checked = cfg.strict;
   $('ts-custom').value = cfg.customText ?? '';
@@ -66,35 +77,56 @@ function setupForm() {
   const apply = (e) => {
     // Beim Moduswechsel passende Standardlänge wählen
     if (e?.target?.id === 'ts-source') $('ts-length').value = $('ts-source').value === 'custom' ? 'full' : DEFAULTS.length;
+    const prevList = cfg.list;
     cfg = {
       source: $('ts-source').value,
+      list: $('ts-list').value,
       length: $('ts-length').value,
-      focus: $('ts-focus').value,
-      finger: $('ts-finger').value,
+      customLen: { n: +$('ts-len-n').value, unit: $('ts-len-unit').value },
       caps: $('ts-caps').checked,
       strict: $('ts-strict').checked,
       customText: $('ts-custom').value.slice(0, CUSTOM_MAX),
     };
     syncForm();
     cfg.length = $('ts-length').value;
+    cfg.customLen = { n: +$('ts-len-n').value, unit: $('ts-len-unit').value };
     saveSettings({ training: cfg });
-    reset();
+    if (cfg.list !== prevList) useList(cfg.list);
+    else reset();
   };
   $('train-settings').addEventListener('change', apply);
   $('ts-custom-apply').addEventListener('click', () => { apply(); box.focus(); });
-  $('train-settings').addEventListener('submit', (e) => e.preventDefault());
+  $('train-settings').addEventListener('submit', (e) => { e.preventDefault(); apply(); box.focus(); });
   $('ts-restart').addEventListener('click', () => { reset(); box.focus(); });
 }
 
-// Modusabhängige Felder ein-/ausblenden, ungültige Länge korrigieren
+// Modusabhängige Felder ein-/ausblenden, ungültige Werte korrigieren
 function syncForm() {
   const custom = $('ts-source').value === 'custom';
   document.querySelectorAll('#train-settings .words-only').forEach((el) => { el.hidden = custom; });
   $('ts-custom-wrap').hidden = !custom;
   const len = $('ts-length');
   for (const opt of len.options) opt.disabled = custom ? opt.value[0] === 'w' : opt.value === 'full';
-  $('ts-length').querySelector('option[value="full"]').hidden = !custom;
+  len.querySelector('option[value="full"]').hidden = !custom;
   if (len.selectedOptions[0]?.disabled) len.value = custom ? 'full' : DEFAULTS.length;
+
+  // Eigene Länge: Wörter nur bei Wortlisten
+  const unit = $('ts-len-unit');
+  unit.querySelector('option[value="words"]').disabled = custom;
+  if (custom && unit.value === 'words') unit.value = 'min';
+  $('ts-len-wrap').hidden = len.value !== 'custom';
+  const n = $('ts-len-n');
+  const lim = LEN_LIMITS[unit.value];
+  [n.min, n.max] = lim;
+  n.value = clamp(n.value, lim);
+}
+
+/** Tatsächliche Länge als Code: t<Sekunden>, w<Wörter> oder full */
+function lengthCode() {
+  if (cfg.length !== 'custom') return cfg.length;
+  const { n, unit } = cfg.customLen;
+  const v = clamp(n, LEN_LIMITS[unit] ?? LEN_LIMITS.min);
+  return unit === 'words' ? `w${v}` : `t${unit === 'min' ? v * 60 : v}`;
 }
 
 // ----- Eigener Text -----
@@ -115,39 +147,12 @@ function makeGenerator() {
     let i = 0;
     return () => words[i++ % words.length];
   }
-  const rows = FOCUS_ROWS[cfg.focus] ?? null;
-  const allowed = new Set((rows ?? Object.keys(ROW_CHARS)).flatMap((r) => [...ROW_CHARS[r]]));
-  let fingerChars = null;
-  if (cfg.finger !== 'all') {
-    fingerChars = [...allowed].filter((c) => keyForChar(c)?.finger === cfg.finger);
-    if (!fingerChars.length) fingerChars = null;
-  }
-
-  const real = wordlist
-    .filter((w) => {
-      const lw = w.toLowerCase();
-      if (rows && ![...lw].every((c) => allowed.has(c))) return false;
-      if (fingerChars && ![...lw].some((c) => fingerChars.includes(c))) return false;
-      return true;
-    })
-    .map((w) => (cfg.caps ? w : w.toLowerCase()));
-
-  const pool = [...allowed];
-  const pseudo = () => {
-    const len = 2 + Math.floor(Math.random() * 4);
-    let w = '';
-    for (let i = 0; i < len; i++) w += fingerChars && Math.random() < 0.5 ? pick(fingerChars) : pick(pool);
-    return cfg.caps && Math.random() < 0.15 ? w[0].toUpperCase() + w.slice(1) : w;
-  };
-
+  const words = cfg.caps ? wordlist : wordlist.map((w) => w.toLowerCase());
   let last = '';
   return () => {
     let w;
     let tries = 0;
-    do {
-      const useReal = real.length >= MIN_REAL_WORDS || (real.length > 0 && Math.random() < 0.5);
-      w = useReal ? pick(real) : pseudo();
-    } while (w === last && ++tries < 10);
+    do { w = pick(words); } while (w === last && ++tries < 10);
     last = w;
     return w;
   };
@@ -158,9 +163,10 @@ function reset() {
   clearInterval(s?.timer);
   const custom = cfg.source === 'custom';
   const words = custom ? customWords().length : 0;
-  const full = custom && cfg.length === 'full';
-  const type = full ? 'w' : cfg.length[0]; // 't' = Zeit, 'w' = Wörter
-  const n = full ? words : Number(cfg.length.slice(1));
+  const code = lengthCode();
+  const full = custom && code === 'full';
+  const type = full ? 'w' : code[0]; // 't' = Zeit, 'w' = Wörter
+  const n = full ? words : Number(code.slice(1));
   s = {
     type, n, gen: makeGenerator(),
     chars: [], spans: [], typed: [], pos: 0,
@@ -170,9 +176,11 @@ function reset() {
   };
   textEl.replaceChildren();
   textEl.style.transform = '';
-  s.empty = custom && words === 0;
+  s.empty = custom ? words === 0 : wordlist.length === 0;
   if (s.empty) {
-    textEl.textContent = 'Gib oben deinen eigenen Text ein und klick auf „Text übernehmen“.';
+    textEl.textContent = custom
+      ? 'Gib oben deinen eigenen Text ein und klick auf „Text übernehmen“.'
+      : loadErr ? 'Die Wortliste konnte nicht geladen werden. Bitte Seite neu laden.' : 'Wortliste wird geladen …';
   } else {
     appendWords(type === 'w' ? n : 40);
   }
@@ -326,10 +334,9 @@ function finish() {
   if (s.type === 'w') $('st-words').textContent = `${s.n}/${s.n}`;
 
   if (s.strokes > 0) {
-    const { customText, ...rest } = cfg;
     const config = cfg.source === 'custom'
-      ? { source: 'custom', length: cfg.length, focus: 'custom', strict: cfg.strict }
-      : { ...rest };
+      ? { source: 'custom', length: lengthCode(), focus: 'custom', strict: cfg.strict }
+      : { source: 'words', list: cfg.list, length: lengthCode(), caps: cfg.caps, strict: cfg.strict };
     addSession({
       mode: 'training',
       config,

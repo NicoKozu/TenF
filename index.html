@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261025000332">
+  <link rel="stylesheet" href="css/style.css?v=20261025002635">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,22 +31,23 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261025000332",
-      "./js/excel.js": "./js/excel.js?v=20261025000332",
-      "./js/history.js": "./js/history.js?v=20261025000332",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261025000332",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025000332",
-      "./js/lessons.js": "./js/lessons.js?v=20261025000332",
-      "./js/main.js": "./js/main.js?v=20261025000332",
-      "./js/settings.js": "./js/settings.js?v=20261025000332",
-      "./js/storage.js": "./js/storage.js?v=20261025000332",
-      "./js/themes.js": "./js/themes.js?v=20261025000332",
-      "./js/training.js": "./js/training.js?v=20261025000332",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261025000332"
+      "./js/caret.js": "./js/caret.js?v=20261025002635",
+      "./js/excel.js": "./js/excel.js?v=20261025002635",
+      "./js/history.js": "./js/history.js?v=20261025002635",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261025002635",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025002635",
+      "./js/lessons.js": "./js/lessons.js?v=20261025002635",
+      "./js/main.js": "./js/main.js?v=20261025002635",
+      "./js/settings.js": "./js/settings.js?v=20261025002635",
+      "./js/storage.js": "./js/storage.js?v=20261025002635",
+      "./js/themes.js": "./js/themes.js?v=20261025002635",
+      "./js/training.js": "./js/training.js?v=20261025002635",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261025002635",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261025002635"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261025000332"></script>
+  <script type="module" src="js/main.js?v=20261025002635"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -126,9 +127,12 @@
       <form id="train-settings" class="train-settings" aria-label="Trainingseinstellungen">
         <label>Modus
           <select id="ts-source">
-            <option value="words">Zufällige Wörter</option>
+            <option value="words">Wortliste</option>
             <option value="custom">Eigener Text</option>
           </select>
+        </label>
+        <label class="words-only">Wortliste
+          <select id="ts-list" aria-describedby="ts-list-src"></select>
         </label>
         <label>Länge
           <select id="ts-length">
@@ -143,19 +147,21 @@
               <option value="w100">100 Wörter</option>
             </optgroup>
             <option value="full">Ganzer Text</option>
+            <option value="custom">Eigene …</option>
           </select>
         </label>
-        <label class="words-only">Fokus
-          <select id="ts-focus">
-            <option value="all">Alle Tasten</option>
-            <option value="home">Grundreihe</option>
-            <option value="home-top">Grund- + obere Reihe</option>
-            <option value="home-bottom">Grund- + untere Reihe</option>
-          </select>
-        </label>
-        <label class="words-only">Finger
-          <select id="ts-finger"></select>
-        </label>
+        <div id="ts-len-wrap" class="len-custom" hidden>
+          <label>Anzahl
+            <input type="number" id="ts-len-n" inputmode="numeric" min="1" max="3600" step="1">
+          </label>
+          <label>Einheit
+            <select id="ts-len-unit">
+              <option value="sec">Sekunden</option>
+              <option value="min">Minuten</option>
+              <option value="words">Wörter</option>
+            </select>
+          </label>
+        </div>
         <label class="check words-only"><input type="checkbox" id="ts-caps"> Großschreibung</label>
         <label class="check"><input type="checkbox" id="ts-strict"> Bei Fehler stoppen</label>
         <button type="button" id="ts-restart" class="btn">Neu starten (Esc)</button>
@@ -170,6 +176,8 @@
           </div>
         </div>
       </form>
+
+      <p id="ts-list-src" class="hint list-src words-only-hint">Wortlisten: die häufigsten Wörter aus dem OpenSubtitles-Korpus (<a href="https://github.com/hermitdave/FrequencyWords" rel="noopener">FrequencyWords</a>, CC BY-SA 4.0), auf Rechtschreibung geprüft – ohne Namen und Vulgäres.</p>
 
       <div class="stats" role="group" aria-label="Live-Werte">
         <div class="stat"><span class="stat-val" id="st-time">1:00</span><span class="stat-lbl" id="st-time-lbl">Restzeit</span></div>
@@ -231,7 +239,7 @@
         <div class="table-wrap" tabindex="0" role="region" aria-label="Session-Tabelle">
           <table class="hist-table">
             <thead>
-              <tr><th scope="col">Datum</th><th scope="col">Länge</th><th scope="col">Fokus</th><th scope="col" class="num">Dauer</th>
+              <tr><th scope="col">Datum</th><th scope="col">Länge</th><th scope="col">Wortliste / Fokus</th><th scope="col" class="num">Dauer</th>
                 <th scope="col" class="num">WPM</th><th scope="col" class="num">Genauigkeit</th><th scope="col" class="num">Fehler</th>
                 <th scope="col"><span class="visually-hidden">Aktion</span></th></tr>
             </thead>

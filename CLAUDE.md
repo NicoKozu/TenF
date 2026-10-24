@@ -29,14 +29,17 @@ js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur)
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
-js/training.js        Trainingsmodus: Zufallswörter oder eigener Text, Tipp-Engine, Live-Werte, Session speichern
+js/training.js        Trainingsmodus: Wortliste oder eigener Text, Länge (Zeit/Wörter/eigene), Tipp-Engine, Live-Werte, Session speichern
+js/wordlists.js       Wortlisten-Katalog (de/en × 100/1k/10k), Laden mit Cache, Längen-Beschriftung
 js/history.js         Verlauf: Kennzahlen, Diagramm, Schwachstellen/Heatmap, Tabelle, Export/Import
 js/storage.js         Einstellungen, Sessions, Lektionsfortschritt, Export/Import
 js/excel.js           Sessions ⇄ Excel (Spalten, Parsing), lazy geladen
 js/xlsx.js            Minimaler XLSX-Writer/-Reader
 js/vendor/            Chart.js 4 (UMD), fflate (ZIP) – beide MIT
-data/wordlist-de.json Deutsche Wortliste
+data/wordlist-de.json Kuratierte Startliste (nur noch für Lektionen)
+data/dict/            Wörterbuch: <sprache>/top-100|1000|10000.json + index.json + README (Quelle, Methode, Lizenz)
 tools/bump-version.py Version für Cache-Busting setzen (vor jedem Commit)
+tools/build-dict.py   Baut data/dict/ neu (OpenSubtitles-Häufigkeiten + Hunspell + Wiktionary + UD-Baumbanken; braucht `pip install spylls`)
 ```
 
 ## Kennzahlen
@@ -53,5 +56,6 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
 4. ✅ Lern-Lektionen (bestanden ab 90 % Genauigkeit; Fortschritt getrennt vom Verlauf)
 5. ✅ Deployment GitHub Pages (automatisch bei jedem Push)
    - ✅ Einstellungen: 5 Designs + System, Größenregler, Training: Modus „Eigener Text“
+   - ✅ Wörterbuch DE/EN (Top 100/1k/10k), Fokus/Finger entfernt, eigene Länge
    - ✅ Redesign: Glas-Look, 12 Vorlagen + eigene Farben, Effekte, gleitender Cursor, Fokus-Modus
 6. Optional: Accounts/Sync via Supabase (dann Impressum + Datenschutz)

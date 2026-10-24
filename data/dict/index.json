@@ -1,0 +1,23 @@
+{
+  "source": "FrequencyWords (OpenSubtitles 2018) von Hermit Dave",
+  "sourceUrl": "https://github.com/hermitdave/FrequencyWords",
+  "license": "CC BY-SA 4.0",
+  "languages": {
+    "de": {
+      "name": "Deutsch",
+      "lists": {
+        "100": "de/top-100.json",
+        "1000": "de/top-1000.json",
+        "10000": "de/top-10000.json"
+      }
+    },
+    "en": {
+      "name": "Englisch",
+      "lists": {
+        "100": "en/top-100.json",
+        "1000": "en/top-1000.json",
+        "10000": "en/top-10000.json"
+      }
+    }
+  }
+}

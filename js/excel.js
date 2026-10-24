@@ -1,6 +1,7 @@
 // Sessions ⇄ Excel (.xlsx). Wird erst bei Export/Import nachgeladen.
 import { writeXlsx, readXlsx, fromSerial, STYLE } from './xlsx.js';
 import { labelForCode, codeForLabel, FINGERS } from './keyboard.js';
+import { LISTS, listName, lengthLabel } from './wordlists.js';
 
 const SHEET = 'Sessions';
 const FOCUS = { all: 'Alle Tasten', home: 'Grundreihe', 'home-top': 'Grund + oben', 'home-bottom': 'Grund + unten', custom: 'Eigener Text' };
@@ -8,7 +9,7 @@ const MODE = { training: 'Training' };
 
 // [Überschrift, Breite, Stil]
 const COLS = [
-  ['Datum', 17, STYLE.date], ['Modus', 10], ['Länge', 11], ['Fokus', 14], ['Finger', 21],
+  ['Datum', 17, STYLE.date], ['Modus', 10], ['Länge', 11], ['Wortliste', 20], ['Fokus', 14], ['Finger', 21],
   ['Großschreibung', 10], ['Bei Fehler stoppen', 10], ['Dauer (s)', 9, STYLE.int], ['WPM', 8, STYLE.dec1],
   ['Genauigkeit (%)', 12, STYLE.pct], ['Korrekte Zeichen', 10, STYLE.int], ['Anschläge', 10, STYLE.int],
   ['Fehler', 8, STYLE.int], ['Fehler je Taste', 38], ['Fehler je Finger', 38], ['Anschläge je Taste', 48], ['ID', 38],
@@ -18,19 +19,17 @@ const COLS = [
 const yesNo = (b) => (b ? 'Ja' : 'Nein');
 const round1 = (n) => Math.round(n * 10) / 10;
 
-function lengthLabel(l = '') {
-  if (l === 'full') return 'Ganzer Text';
-  const n = Number(l.slice(1));
-  return l[0] === 't' ? `${n / 60} Min` : l[0] === 'w' ? `${n} Wörter` : '';
-}
-
 function parseLength(v) {
   const s = String(v ?? '').trim();
   if (/^[tw]\d+$/.test(s)) return s;
   if (s === 'full' || /^ganzer text$/i.test(s)) return 'full';
   const n = parseFloat(s.replace(',', '.'));
   if (!Number.isFinite(n)) return undefined;
-  if (/min/i.test(s)) return 't' + Math.round(n * 60);
+  if (/min/i.test(s)) {
+    const m = /^(\d+):(\d{2})/.exec(s); // 1:30 Min
+    return 't' + (m ? +m[1] * 60 + +m[2] : Math.round(n * 60));
+  }
+  if (/^\d+([.,]\d+)?\s*s(ek|ec)?/i.test(s)) return 't' + Math.round(n);
   if (/w/i.test(s)) return 'w' + Math.round(n);
   return undefined;
 }
@@ -96,7 +95,7 @@ export function sessionsToXlsx(sessions) {
   const rows = sessions.map((s) => {
     const c = s.config ?? {};
     const vals = [
-      new Date(s.date), MODE[s.mode] ?? s.mode ?? '', lengthLabel(c.length), FOCUS[c.focus] ?? '',
+      new Date(s.date), MODE[s.mode] ?? s.mode ?? '', lengthLabel(c.length), c.list ? listName(c.list) : '', FOCUS[c.focus] ?? '',
       c.finger && c.finger !== 'all' ? FINGERS[c.finger] ?? c.finger : 'Alle',
       c.caps == null ? '' : yesNo(c.caps), c.strict == null ? '' : yesNo(c.strict),
       s.durationSec, round1(s.wpm), round1(s.accuracy), s.chars, s.strokes, s.errors,
@@ -159,11 +158,13 @@ export function xlsxToSessions(buf) {
     }
 
     const length = parseLength(get(row, 'Länge'));
-    const focus = reverse(FOCUS, get(row, 'Fokus')) ?? 'all';
+    const focus = reverse(FOCUS, get(row, 'Fokus')) ?? (get(row, 'Wortliste') ? undefined : 'all');
+    const listTxt = String(get(row, 'Wortliste') ?? '').trim();
+    const list = Object.keys(LISTS).find((id) => listName(id) === listTxt);
     const fingerTxt = String(get(row, 'Finger') ?? '').trim();
     const config = {
       ...(focus === 'custom' ? { source: 'custom' } : {}),
-      length, focus,
+      length, focus, list,
       finger: fingerTxt && fingerTxt.toLowerCase() !== 'alle' ? fingerByName(fingerTxt) ?? 'all' : 'all',
       caps: parseBool(get(row, 'Großschreibung')),
       strict: parseBool(get(row, 'Bei Fehler stoppen')),
