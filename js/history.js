@@ -1,6 +1,6 @@
 // Verlauf & Statistik: Kennzahlen, Diagramm, Schwachstellen, Session-Liste, Export/Import.
 import { createKeyboard, labelForCode, FINGERS } from './keyboard.js';
-import { getSessions, deleteSession, clearSessions, exportData, importData } from './storage.js';
+import { getSessions, deleteSession, clearSessions, exportData, importData, importSessions } from './storage.js';
 
 const $ = (id) => document.getElementById(id);
 const nf1 = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -146,17 +146,19 @@ async function renderChart(list) {
 // ----- Schwachstellen -----
 function renderWeak(all) {
   const recent = all.slice(-WEAK_WINDOW);
-  const errs = {}, hits = {}, fingers = {};
+  const errs = {}, hits = {}, rated = {}, fingers = {};
+  const add = (o, k, n) => { o[k] = (o[k] ?? 0) + n; };
   for (const s of recent) {
-    for (const [k, n] of Object.entries(s.errorsByKey ?? {})) errs[k] = (errs[k] ?? 0) + n;
-    for (const [k, n] of Object.entries(s.hitsByKey ?? {})) hits[k] = (hits[k] ?? 0) + n;
+    const hasH = s.hitsByKey && Object.keys(s.hitsByKey).length > 0;
+    for (const [k, n] of Object.entries(s.errorsByKey ?? {})) { add(errs, k, n); if (hasH) add(rated, k, n); }
+    for (const [k, n] of Object.entries(s.hitsByKey ?? {})) add(hits, k, n);
     for (const [k, n] of Object.entries(s.errorsByFinger ?? {})) fingers[k] = (fingers[k] ?? 0) + n;
   }
   const hasHits = Object.keys(hits).length > 0;
 
   // Fehlerquote, wenn Anschlagszahlen vorliegen (neuere Sessions), sonst absolute Fehler.
   const keys = Object.entries(errs).map(([code, n]) => ({
-    code, n, rate: hits[code] >= MIN_HITS ? n / hits[code] : null,
+    code, n, rate: hits[code] >= MIN_HITS ? (rated[code] ?? 0) / hits[code] : null,
   }));
   keys.sort((a, b) => (hasHits ? (b.rate ?? -1) - (a.rate ?? -1) : 0) || b.n - a.n);
   const top = keys.slice(0, 8);
@@ -229,6 +231,7 @@ function render() {
   $('hist-empty').hidden = !empty;
   $('hist-content').hidden = empty;
   $('hist-export').disabled = empty;
+  $('hist-export-xlsx').disabled = empty;
   $('hist-clear').disabled = empty;
   if (empty) { chart?.destroy(); chart = null; return; }
   renderSummary(all);
@@ -244,14 +247,30 @@ function msg(text, isErr = false) {
 }
 
 // ----- Daten-Aktionen -----
-function download() {
-  const blob = new Blob([exportData()], { type: 'application/json' });
-  const a = el('a', { href: URL.createObjectURL(blob), download: `tenf-export-${new Date().toISOString().slice(0, 10)}.json` });
+const today = () => new Date().toISOString().slice(0, 10);
+
+function saveFile(data, type, name) {
+  const a = el('a', { href: URL.createObjectURL(new Blob([data], { type })), download: name });
   document.body.append(a);
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  msg('Export erstellt.');
+}
+
+function exportJson() {
+  saveFile(exportData(), 'application/json', `tenf-backup-${today()}.json`);
+  msg('JSON-Backup erstellt.');
+}
+
+async function exportExcel() {
+  try {
+    const { sessionsToXlsx } = await import('./excel.js');
+    saveFile(sessionsToXlsx(getSessions()),
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', `tenf-verlauf-${today()}.xlsx`);
+    msg('Excel-Datei erstellt.');
+  } catch (err) {
+    msg(`Excel-Export fehlgeschlagen: ${err.message}`, true);
+  }
 }
 
 async function importFile(e) {
@@ -259,9 +278,22 @@ async function importFile(e) {
   e.target.value = '';
   if (!file) return;
   try {
-    const before = getSessions().length;
-    const total = importData(await file.text(), { merge: true });
-    msg(`Import erfolgreich: ${total - before} neue Session(s), insgesamt ${total}.`);
+    const buf = new Uint8Array(await file.arrayBuffer());
+    const isZip = buf[0] === 0x50 && buf[1] === 0x4b; // "PK" → .xlsx
+    if (isZip) {
+      const { xlsxToSessions } = await import('./excel.js');
+      const { sessions, skipped } = xlsxToSessions(buf);
+      if (!sessions.length) throw new Error('Keine gültigen Zeilen gefunden.');
+      const r = importSessions(sessions);
+      const skip = skipped.length
+        ? ` ${skipped.length} ungültige Zeile(n) übersprungen (Zeile ${skipped.slice(0, 5).join(', ')}${skipped.length > 5 ? ' …' : ''}).`
+        : '';
+      msg(`Excel importiert: ${r.added} neu, ${r.updated} aktualisiert, insgesamt ${r.total}.${skip}`, skipped.length > 0);
+    } else {
+      const before = getSessions().length;
+      const total = importData(new TextDecoder().decode(buf), { merge: true });
+      msg(`JSON importiert: ${total - before} neue Session(s), insgesamt ${total}.`);
+    }
     render();
   } catch (err) {
     msg(`Import fehlgeschlagen: ${err.message}`, true);
@@ -274,7 +306,8 @@ export function initHistory() {
 
   $('hist-range').addEventListener('change', () => renderChart(rangeFilter(getSessions())));
   $('hist-more').addEventListener('click', () => { showAll = !showAll; renderTable(getSessions()); });
-  $('hist-export').addEventListener('click', download);
+  $('hist-export-xlsx').addEventListener('click', exportExcel);
+  $('hist-export').addEventListener('click', exportJson);
   $('hist-import').addEventListener('change', importFile);
   $('hist-clear').addEventListener('click', () => {
     if (!confirm('Gesamten Verlauf unwiderruflich löschen? Tipp: Vorher exportieren.')) return;

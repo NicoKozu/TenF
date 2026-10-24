@@ -93,6 +93,18 @@ export function fingerForCode(code) {
   return KEY_BY_CODE.get(code)?.finger ?? null;
 }
 
+/** Umkehrung von labelForCode: Anzeigename (oder event.code) → code, sonst null. */
+export function codeForLabel(label) {
+  const l = String(label ?? '').trim();
+  if (KEY_BY_CODE.has(l)) return l;
+  if (/^(leertaste|leerzeichen|space)$/i.test(l)) return 'Space';
+  for (const code of KEY_BY_CODE.keys()) {
+    const lab = labelForCode(code);
+    if (lab === l || lab === l.toUpperCase()) return code;
+  }
+  return null;
+}
+
 /** Anzeigename einer Taste (Buchstaben groß). */
 export function labelForCode(code) {
   if (code === 'Space') return 'Leertaste';

@@ -147,11 +147,12 @@
       </div>
 
       <h3>Daten</h3>
-      <p class="hint">Alles liegt nur in diesem Browser. Mit Export/Import sicherst du den Verlauf oder überträgst ihn auf ein anderes Gerät (Import ergänzt, überschreibt nichts).</p>
+      <p class="hint">Alles liegt nur in diesem Browser. Exportiere den Verlauf als Excel-Tabelle (zum Ansehen und Bearbeiten) oder als JSON-Backup. Beide Formate kannst du wieder importieren: Neue Sessions werden ergänzt, bearbeitete (gleiche ID) aktualisiert.</p>
       <div class="data-actions">
+        <button type="button" id="hist-export-xlsx" class="btn">Exportieren (Excel)</button>
         <button type="button" id="hist-export" class="btn">Exportieren (JSON)</button>
-        <label class="btn file-btn">Importieren
-          <input type="file" id="hist-import" accept=".json,application/json" class="visually-hidden">
+        <label class="btn file-btn">Importieren (Excel/JSON)
+          <input type="file" id="hist-import" accept=".xlsx,.json,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="visually-hidden">
         </label>
         <button type="button" id="hist-clear" class="btn danger">Verlauf löschen</button>
       </div>

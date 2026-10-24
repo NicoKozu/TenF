@@ -81,6 +81,20 @@ export function importData(json, { merge = false } = {}) {
   return sessions.length;
 }
 
+/**
+ * Fügt Sessions hinzu wie frisch beendete; gleiche ID → aktualisiert.
+ * @returns {{added:number, updated:number, total:number}}
+ */
+export function importSessions(list) {
+  const cur = getSessions();
+  const ids = new Set(cur.map((s) => s.id));
+  const withIds = list.map((s) => ({ ...s, id: s.id || (crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`) }));
+  const updated = withIds.filter((s) => ids.has(s.id)).length;
+  const merged = mergeById(cur, withIds);
+  if (!write(KEYS.sessions, merged)) throw new Error('Speichern fehlgeschlagen (Speicher voll oder gesperrt).');
+  return { added: withIds.length - updated, updated, total: merged.length };
+}
+
 export function deleteSession(id) {
   write(KEYS.sessions, getSessions().filter((s) => s.id !== id));
 }

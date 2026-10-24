@@ -26,7 +26,9 @@ js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/training.js        Trainingsmodus: Wortgenerator, Tipp-Engine, Live-Werte, Session speichern
 js/history.js         Verlauf: Kennzahlen, Diagramm, Schwachstellen/Heatmap, Tabelle, Export/Import
 js/storage.js         Einstellungen, Sessions, Export/Import
-js/vendor/            Chart.js 4 (UMD, MIT-Lizenz)
+js/excel.js           Sessions ⇄ Excel (Spalten, Parsing), lazy geladen
+js/xlsx.js            Minimaler XLSX-Writer/-Reader
+js/vendor/            Chart.js 4 (UMD), fflate (ZIP) – beide MIT
 data/wordlist-de.json Deutsche Wortliste
 ```
 
