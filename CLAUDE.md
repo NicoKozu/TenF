@@ -7,6 +7,7 @@ Web-App zum Lernen und Trainieren des 10-Finger-Schreibens. Gehostet über GitHu
 - Vor größeren Änderungen kurz den Plan nennen.
 - Immer vom aktuellen Repo-Stand ausgehen, keine Annahmen über nicht vorhandene Dateien.
 - Nach Änderungen committen und auf `main` pushen (sofern nicht anders gewünscht).
+- **Vor jedem Commit mit CSS/JS-Änderungen `python3 tools/bump-version.py` ausführen** (Cache-Busting: Import-Map + `?v=` in index.html, sonst mischen Browser alte und neue Dateien). Neue Module in `js/` werden automatisch aufgenommen.
 - Bei Code-Änderungen im Chat nur betroffene Dateien/Abschnitte zeigen.
 - Warnen, wenn ein Chat lang/teuer wird, und einen neuen Chat empfehlen.
 
@@ -33,6 +34,7 @@ js/excel.js           Sessions ⇄ Excel (Spalten, Parsing), lazy geladen
 js/xlsx.js            Minimaler XLSX-Writer/-Reader
 js/vendor/            Chart.js 4 (UMD), fflate (ZIP) – beide MIT
 data/wordlist-de.json Deutsche Wortliste
+tools/bump-version.py Version für Cache-Busting setzen (vor jedem Commit)
 ```
 
 ## Kennzahlen

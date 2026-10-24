@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=20261024234847">
   <script>
     // Design und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
     try {
@@ -20,7 +20,23 @@
       if (s.hideTrainKb) r.classList.add('hide-train-kb');
     } catch (e) { /* ignorieren */ }
   </script>
-  <script type="module" src="js/main.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "./js/excel.js": "./js/excel.js?v=20261024234847",
+      "./js/history.js": "./js/history.js?v=20261024234847",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261024234847",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261024234847",
+      "./js/lessons.js": "./js/lessons.js?v=20261024234847",
+      "./js/main.js": "./js/main.js?v=20261024234847",
+      "./js/settings.js": "./js/settings.js?v=20261024234847",
+      "./js/storage.js": "./js/storage.js?v=20261024234847",
+      "./js/training.js": "./js/training.js?v=20261024234847",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261024234847"
+    }
+  }
+  </script>
+  <script type="module" src="js/main.js?v=20261024234847"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
