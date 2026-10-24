@@ -11,4 +11,6 @@ Dann http://localhost:8000 öffnen (ES-Module funktionieren nicht über `file://
 
 ## Stand
 - ✅ Grundgerüst, Tabs, virtuelle Tastatur mit Fingerfarben, Dark Mode
-- ⏳ Training, Verlauf/Statistik, Lektionen
+- ✅ Training mit Live-Auswertung, Verlauf/Statistik mit Diagramm und Export
+- ✅ 21 aufbauende Lektionen (Grundreihe → Satzzeichen) mit Fortschritt
+- ⏳ Deployment über GitHub Pages

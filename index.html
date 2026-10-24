@@ -23,6 +23,7 @@
 
   <main id="main">
     <section role="tabpanel" id="panel-lernen" aria-labelledby="tab-lernen" tabindex="0">
+     <div id="learn-home">
       <h2>Das 10-Finger-System</h2>
       <p>Jeder Finger ist für feste Tasten zuständig. Ausgangspunkt ist die <strong>Grundstellung</strong>:
         links auf <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>, rechts auf <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>Ö</kbd>,
@@ -40,7 +41,40 @@
       <ul id="finger-legend" class="legend" aria-label="Legende Fingerfarben"></ul>
 
       <h3>Lektionen</h3>
-      <p class="placeholder">Aufbauende Lektionen folgen (Grundreihe → obere Reihe → untere Reihe → Shift → Umlaute → Zahlen/Satzzeichen).</p>
+      <p class="hint">Von der Grundreihe bis zu Satzzeichen – jede Lektion hat drei kurze Übungen. Bestanden ab 90 % Genauigkeit. Bei einem Fehler geht es erst mit der richtigen Taste weiter.</p>
+      <div class="data-actions">
+        <button type="button" id="lesson-continue" class="btn primary">Mit Lektion 1 starten</button>
+      </div>
+      <p id="lesson-progress" class="hint" role="status"></p>
+      <div id="lesson-list"></div>
+      <button type="button" id="lesson-reset" class="btn danger">Lektionsfortschritt zurücksetzen</button>
+     </div>
+
+     <div id="lesson-view" hidden>
+      <button type="button" id="lv-back" class="btn">← Alle Lektionen</button>
+      <p id="lv-group" class="eyebrow"></p>
+      <h2 id="lv-title" tabindex="-1"></h2>
+      <p id="lv-intro"></p>
+      <p id="lv-keys" class="lv-keys"></p>
+      <ol id="lv-steps" class="steps" aria-label="Übungen"></ol>
+
+      <div class="stats" role="group" aria-label="Live-Werte">
+        <div class="stat"><span class="stat-val" id="lv-st-prog">0/0</span><span class="stat-lbl">Zeichen</span></div>
+        <div class="stat"><span class="stat-val" id="lv-st-wpm">–</span><span class="stat-lbl">WPM</span></div>
+        <div class="stat"><span class="stat-val" id="lv-st-acc">–</span><span class="stat-lbl">Genauigkeit</span></div>
+        <div class="stat"><span class="stat-val" id="lv-st-err">0</span><span class="stat-lbl">Fehler</span></div>
+      </div>
+
+      <div id="lv-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
+           aria-label="Übungstext – hier tippen" aria-describedby="lv-next">
+        <div class="typing-view"><div id="lv-text" class="typing-text"></div></div>
+        <p class="typing-overlay" aria-hidden="true">Hier klicken oder einfach lostippen</p>
+      </div>
+      <p id="lv-next" class="hint next-key"></p>
+      <div id="lv-result" class="result" role="status" hidden></div>
+      <p class="hint">Gedimmte Tasten kommen erst in späteren Lektionen, umrandete sind neu.</p>
+      <div id="keyboard-lesson" class="keyboard-wrap"></div>
+     </div>
     </section>
 
     <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0" hidden>

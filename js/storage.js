@@ -2,7 +2,7 @@
 // solange die exportierte API gleich bleibt.
 
 const PREFIX = 'tenf:';
-const KEYS = { settings: 'settings', sessions: 'sessions' };
+const KEYS = { settings: 'settings', sessions: 'sessions', lessons: 'lessons' };
 const DATA_VERSION = 1;
 
 const DEFAULT_SETTINGS = {
@@ -56,10 +56,27 @@ export function addSession(session) {
   return entry;
 }
 
+// ----- Lektionsfortschritt -----
+/** Format: { [lessonId]: { ex: [beste Genauigkeit je Übung | null], bestWpm, done, updated } } */
+export function getLessonProgress() {
+  return read(KEYS.lessons, {});
+}
+
+export function saveLessonProgress(id, patch) {
+  const all = getLessonProgress();
+  all[id] = { ...all[id], ...patch, updated: new Date().toISOString() };
+  write(KEYS.lessons, all);
+  return all[id];
+}
+
+export function clearLessonProgress() {
+  try { localStorage.removeItem(PREFIX + KEYS.lessons); } catch { /* ignorieren */ }
+}
+
 // ----- Export / Import / Löschen -----
 export function exportData() {
   return JSON.stringify(
-    { app: 'tenf', version: DATA_VERSION, exportedAt: new Date().toISOString(), settings: getSettings(), sessions: getSessions() },
+    { app: 'tenf', version: DATA_VERSION, exportedAt: new Date().toISOString(), settings: getSettings(), sessions: getSessions(), lessons: getLessonProgress() },
     null,
     2,
   );
@@ -78,6 +95,9 @@ export function importData(json, { merge = false } = {}) {
   const sessions = merge ? mergeById(getSessions(), data.sessions) : data.sessions;
   write(KEYS.sessions, sessions);
   if (data.settings) saveSettings(data.settings);
+  if (data.lessons && typeof data.lessons === 'object') {
+    write(KEYS.lessons, merge ? { ...getLessonProgress(), ...data.lessons } : data.lessons);
+  }
   return sessions.length;
 }
 

@@ -2,6 +2,7 @@ import { createKeyboard, renderLegend } from './keyboard.js';
 import { getSettings, saveSettings } from './storage.js';
 import { initTraining } from './training.js';
 import { initHistory } from './history.js';
+import { initLessons } from './lessons.js';
 
 // ----- Theme -----
 const THEMES = ['system', 'light', 'dark'];
@@ -80,5 +81,6 @@ function initLearnKeyboard() {
 initTheme();
 initLearnKeyboard();
 initTabs();
+initLessons();
 initTraining();
 initHistory();

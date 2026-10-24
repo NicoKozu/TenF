@@ -23,9 +23,11 @@ index.html            Tabs: Lernen / Training / Verlauf
 css/style.css         Theme-Variablen, Fingerfarben, Layout
 js/main.js            Einstieg: Tabs, Theme, Initialisierung
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
+js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
+js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
 js/training.js        Trainingsmodus: Wortgenerator, Tipp-Engine, Live-Werte, Session speichern
 js/history.js         Verlauf: Kennzahlen, Diagramm, Schwachstellen/Heatmap, Tabelle, Export/Import
-js/storage.js         Einstellungen, Sessions, Export/Import
+js/storage.js         Einstellungen, Sessions, Lektionsfortschritt, Export/Import
 js/excel.js           Sessions ⇄ Excel (Spalten, Parsing), lazy geladen
 js/xlsx.js            Minimaler XLSX-Writer/-Reader
 js/vendor/            Chart.js 4 (UMD), fflate (ZIP) – beide MIT
@@ -43,6 +45,6 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
 1. ✅ Grundgerüst + Tabs + virtuelle Tastatur
 2. ✅ Trainingsmodus mit Wortliste und Live-Auswertung
 3. ✅ Verlauf mit localStorage + Diagramm
-4. Lern-Lektionen
+4. ✅ Lern-Lektionen (bestanden ab 90 % Genauigkeit; Fortschritt getrennt vom Verlauf)
 5. Deployment GitHub Pages
 6. Optional: Accounts/Sync via Supabase (dann Impressum + Datenschutz)

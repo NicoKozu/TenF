@@ -169,6 +169,19 @@ export function createKeyboard(container) {
         el.classList.toggle('hot', v > 0);
       });
     },
+    /**
+     * Lektionsansicht: bekannte Tasten normal, übrige gedimmt, neue markiert.
+     * known/fresh = Iterables von codes; known=null schaltet das Dimmen aus.
+     */
+    mark(known, fresh = []) {
+      const k = known ? new Set(known) : null;
+      const f = new Set(fresh);
+      kb.classList.toggle('dim', !!k);
+      els.forEach((el, code) => {
+        el.classList.toggle('known', !k || k.has(code) || f.has(code));
+        el.classList.toggle('fresh', f.has(code));
+      });
+    },
     /** Kurz eine Taste als falsch markieren. */
     flashWrong(code, ms = 300) {
       const el = els.get(code);
