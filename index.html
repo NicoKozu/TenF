@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TenF – Zehnfinger-Trainer</title>
+  <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <header class="site-header">
+    <h1 class="logo">Ten<span>F</span></h1>
+    <nav class="tabs" role="tablist" aria-label="Bereiche">
+      <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
+      <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="false" tabindex="-1">Training</button>
+      <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
+    </nav>
+    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Farbschema wechseln">◐</button>
+  </header>
+
+  <main id="main">
+    <section role="tabpanel" id="panel-lernen" aria-labelledby="tab-lernen" tabindex="0">
+      <h2>Das 10-Finger-System</h2>
+      <p>Jeder Finger ist für feste Tasten zuständig. Ausgangspunkt ist die <strong>Grundstellung</strong>:
+        links auf <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>, rechts auf <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>Ö</kbd>,
+        beide Daumen auf der Leertaste. Die kleinen Erhebungen auf <kbd>F</kbd> und <kbd>J</kbd> helfen, die Position blind zu finden.</p>
+      <ul class="tips">
+        <li>Nicht auf die Tastatur schauen – der Blick bleibt auf dem Text.</li>
+        <li>Nach jedem Anschlag kehrt der Finger in die Grundstellung zurück.</li>
+        <li>Aufrecht sitzen, Handgelenke locker, Unterarme etwa waagrecht.</li>
+        <li>Genauigkeit vor Tempo – Geschwindigkeit kommt von allein.</li>
+      </ul>
+
+      <h3>Fingerzuordnung</h3>
+      <p class="hint">Drück ein paar Tasten auf deiner Tastatur – sie leuchten unten mit auf.</p>
+      <div id="keyboard-lernen" class="keyboard-wrap"></div>
+      <ul id="finger-legend" class="legend" aria-label="Legende Fingerfarben"></ul>
+
+      <h3>Lektionen</h3>
+      <p class="placeholder">Aufbauende Lektionen folgen (Grundreihe → obere Reihe → untere Reihe → Shift → Umlaute → Zahlen/Satzzeichen).</p>
+    </section>
+
+    <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0" hidden>
+      <h2>Training</h2>
+      <p class="placeholder">Trainingsmodus mit zufälligen Wörtern und Live-Auswertung folgt in Schritt 2.</p>
+    </section>
+
+    <section role="tabpanel" id="panel-verlauf" aria-labelledby="tab-verlauf" tabindex="0" hidden>
+      <h2>Verlauf &amp; Statistik</h2>
+      <p class="placeholder">Gespeicherte Sessions, Diagramm und Schwachstellen-Analyse folgen in Schritt 3.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Alle Daten bleiben lokal in deinem Browser. Kein Tracking.</p>
+  </footer>
+</body>
+</html>

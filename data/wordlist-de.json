@@ -1,0 +1,26 @@
+{
+  "language": "de",
+  "description": "Häufige deutsche Wörter für das Training (Startliste, wird erweitert).",
+  "words": [
+    "der", "die", "das", "und", "ist", "nicht", "sie", "ich", "mit", "sich",
+    "auf", "für", "ein", "eine", "auch", "als", "an", "es", "er", "so",
+    "dass", "kann", "aus", "wir", "noch", "wie", "nach", "bei", "nur", "oder",
+    "aber", "vor", "zur", "bis", "mehr", "durch", "man", "über", "sehr", "was",
+    "schon", "wenn", "hier", "immer", "heute", "gut", "neu", "groß", "klein", "alt",
+    "jung", "lang", "kurz", "hoch", "schnell", "langsam", "leicht", "schwer", "früh", "spät",
+    "gehen", "kommen", "sehen", "machen", "sagen", "geben", "finden", "denken", "nehmen", "bleiben",
+    "lesen", "schreiben", "lernen", "spielen", "fahren", "laufen", "essen", "trinken", "hören", "sprechen",
+    "arbeiten", "wohnen", "kaufen", "zeigen", "fragen", "bringen", "halten", "stehen", "liegen", "sitzen",
+    "Haus", "Zeit", "Jahr", "Tag", "Mensch", "Hand", "Welt", "Leben", "Stadt", "Land",
+    "Kind", "Frau", "Mann", "Freund", "Schule", "Arbeit", "Wasser", "Brot", "Buch", "Tisch",
+    "Stuhl", "Fenster", "Tür", "Straße", "Auto", "Zug", "Baum", "Blume", "Garten", "Wald",
+    "Berg", "See", "Meer", "Sonne", "Mond", "Stern", "Himmel", "Regen", "Schnee", "Wind",
+    "Morgen", "Abend", "Nacht", "Woche", "Monat", "Wort", "Satz", "Frage", "Antwort", "Idee",
+    "Musik", "Bild", "Farbe", "Spiel", "Ball", "Hund", "Katze", "Vogel", "Fisch", "Pferd",
+    "Apfel", "Käse", "Milch", "Kaffee", "Tee", "Zucker", "Suppe", "Kuchen", "Küche", "Teller",
+    "Größe", "Übung", "Fußball", "Schlüssel", "Mädchen", "Bäcker", "Brücke", "Gemüse", "Tastatur", "Finger",
+    "allein", "bald", "dort", "gern", "genau", "ganz", "jetzt", "leise", "laut", "oft",
+    "selten", "wieder", "zusammen", "zuerst", "danach", "weiter", "richtig", "falsch", "fertig", "bereit",
+    "schön", "müde", "froh", "warm", "kalt", "hell", "dunkel", "ruhig", "wichtig", "einfach"
+  ]
+}
