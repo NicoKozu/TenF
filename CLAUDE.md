@@ -20,7 +20,7 @@ Web-App zum Lernen und Trainieren des 10-Finger-Schreibens. Gehostet über GitHu
 
 ## Struktur
 ```
-index.html            Tabs: Lernen / Training / Verlauf / Einstellungen
+index.html            Tabs: Lernen / Training / Verlauf / Tipps / Einstellungen
 css/style.css         Glas-Design: Startwerte der Variablen, Aurora-Hintergrund, Fingerfarben (color-mix mit --finger), Layout
 js/main.js            Einstieg: Tabs, Initialisierung
 js/themes.js          12 Vorlagen, Effekt-Defaults, Farbhelfer/Kontrast, deriveVars, Design-Code (TENF-…)
@@ -29,8 +29,9 @@ js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur)
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
-js/training.js        Trainingsmodus: Wortliste oder eigener Text, Länge (Zeit/Wörter/eigene), Tipp-Engine, Live-Werte, Session speichern
+js/training.js        Trainingsmodus: Wortliste oder eigener Text, Länge (Zeit/Wörter/eigene), Tipp-Engine, Live-Werte, Session speichern, applyPreset()
 js/wordlists.js       Wortlisten-Katalog (de/en × 100/1k/10k), Laden mit Cache, Längen-Beschriftung
+js/tips.js            Tipps: regelbasierte Empfehlungen aus dem Verlauf (keine KI), Prioritäten, Quellen; Buttons setzen Training per applyPreset()
 js/history.js         Verlauf: Kennzahlen, Diagramm, Schwachstellen/Heatmap, Tabelle, Export/Import
 js/storage.js         Einstellungen, Sessions, Lektionsfortschritt, Export/Import
 js/excel.js           Sessions ⇄ Excel (Spalten, Parsing), lazy geladen
@@ -58,4 +59,5 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
    - ✅ Einstellungen: 5 Designs + System, Größenregler, Training: Modus „Eigener Text“
    - ✅ Wörterbuch DE/EN (Top 100/1k/10k), Fokus/Finger entfernt, eigene Länge
    - ✅ Redesign: Glas-Look, 12 Vorlagen + eigene Farben, Effekte, gleitender Cursor, Fokus-Modus
+   - ✅ Tipps-Tab: persönliche Empfehlungen (Präzision, Schwachstellen, Tempo-Sprints, Routine, Level-up, blind tippen) mit Direktstart
 6. Optional: Accounts/Sync via Supabase (dann Impressum + Datenschutz)

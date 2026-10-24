@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261025003830">
+  <link rel="stylesheet" href="css/style.css?v=20261025005804">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,23 +31,24 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261025003830",
-      "./js/excel.js": "./js/excel.js?v=20261025003830",
-      "./js/history.js": "./js/history.js?v=20261025003830",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261025003830",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025003830",
-      "./js/lessons.js": "./js/lessons.js?v=20261025003830",
-      "./js/main.js": "./js/main.js?v=20261025003830",
-      "./js/settings.js": "./js/settings.js?v=20261025003830",
-      "./js/storage.js": "./js/storage.js?v=20261025003830",
-      "./js/themes.js": "./js/themes.js?v=20261025003830",
-      "./js/training.js": "./js/training.js?v=20261025003830",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261025003830",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261025003830"
+      "./js/caret.js": "./js/caret.js?v=20261025005804",
+      "./js/excel.js": "./js/excel.js?v=20261025005804",
+      "./js/history.js": "./js/history.js?v=20261025005804",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261025005804",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025005804",
+      "./js/lessons.js": "./js/lessons.js?v=20261025005804",
+      "./js/main.js": "./js/main.js?v=20261025005804",
+      "./js/settings.js": "./js/settings.js?v=20261025005804",
+      "./js/storage.js": "./js/storage.js?v=20261025005804",
+      "./js/themes.js": "./js/themes.js?v=20261025005804",
+      "./js/tips.js": "./js/tips.js?v=20261025005804",
+      "./js/training.js": "./js/training.js?v=20261025005804",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261025005804",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261025005804"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261025003830"></script>
+  <script type="module" src="js/main.js?v=20261025005804"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -60,6 +61,7 @@
       <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
       <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="false" tabindex="-1">Training</button>
       <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
+      <button role="tab" id="tab-tipps" aria-controls="panel-tipps" aria-selected="false" tabindex="-1">Tipps</button>
       <button role="tab" id="tab-einstellungen" aria-controls="panel-einstellungen" aria-selected="false" tabindex="-1">Einstellungen</button>
     </nav>
     <button id="theme-toggle" class="icon-btn" type="button" aria-label="Design wechseln"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2Zm-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg></button>
@@ -258,6 +260,20 @@
         <button type="button" id="hist-clear" class="btn danger">Verlauf löschen</button>
       </div>
       <p id="hist-msg" class="hint msg" role="status"></p>
+    </section>
+
+    <section role="tabpanel" id="panel-tipps" aria-labelledby="tab-tipps" tabindex="0" hidden>
+      <h2>Tipps für dich</h2>
+      <div id="tips-stats" class="stats" role="group" aria-label="Deine Werte" hidden></div>
+      <div id="tips-hero" aria-live="polite"></div>
+      <h3 id="tips-more-head">Außerdem</h3>
+      <div id="tips-more" class="tips-grid"></div>
+      <p id="tips-basis" class="hint"></p>
+      <details class="tips-src">
+        <summary>Woher kommen die Regeln?</summary>
+        <p class="hint">Die Tipps entstehen ohne KI aus festen Regeln, die deine Werte prüfen (Genauigkeit, Tempo, Trend, Fehlerquote je Taste, Regelmäßigkeit). Grundlage:</p>
+        <ul id="tips-sources"></ul>
+      </details>
     </section>
 
     <section role="tabpanel" id="panel-einstellungen" aria-labelledby="tab-einstellungen" tabindex="0" hidden>

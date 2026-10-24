@@ -99,6 +99,32 @@ function setupForm() {
   $('ts-restart').addEventListener('click', () => { reset(); box.focus(); });
 }
 
+/**
+ * Übernimmt eine Voreinstellung (z. B. aus dem Tipps-Tab) ins Formular und startet neu.
+ * preset: { source, list, length ('t60' | 'w50' | beliebig 't<sek>'), caps, strict, customText }
+ */
+export function applyPreset(p = {}) {
+  if (!cfg) return;
+  const set = (id, v) => { if (v !== undefined) $(id).value = v; };
+  set('ts-source', p.source);
+  if (p.list in LISTS) set('ts-list', p.list);
+  set('ts-custom', p.customText);
+  if (p.caps !== undefined) $('ts-caps').checked = p.caps;
+  if (p.strict !== undefined) $('ts-strict').checked = p.strict;
+  if (p.length) {
+    const len = $('ts-length');
+    if ([...len.options].some((o) => o.value === p.length)) len.value = p.length;
+    else {
+      const n = Number(p.length.slice(1));
+      len.value = 'custom';
+      const [v, unit] = p.length[0] === 'w' ? [n, 'words'] : n % 60 ? [n, 'sec'] : [n / 60, 'min'];
+      $('ts-len-n').value = v;
+      $('ts-len-unit').value = unit;
+    }
+  }
+  $('train-settings').dispatchEvent(new Event('change'));
+}
+
 // Modusabhängige Felder ein-/ausblenden, ungültige Werte korrigieren
 function syncForm() {
   const custom = $('ts-source').value === 'custom';

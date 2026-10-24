@@ -3,6 +3,7 @@ import { initSettings } from './settings.js';
 import { initTraining } from './training.js';
 import { initHistory } from './history.js';
 import { initLessons } from './lessons.js';
+import { initTips } from './tips.js';
 import { attachCaret } from './caret.js';
 
 // ----- Tabs (WAI-ARIA Tabs-Pattern) -----
@@ -75,5 +76,6 @@ initTabs();
 initLessons();
 initTraining();
 initHistory();
+initTips();
 for (const id of ['typing-text', 'lv-text']) attachCaret(document.getElementById(id));
 requestAnimationFrame(() => document.documentElement.classList.add('ready'));
