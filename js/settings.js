@@ -9,14 +9,15 @@ export const THEMES = {
   beige: 'Beige',
   lila: 'Lila',
 };
-export const SIZE_DEFAULTS = { ui: 100, text: 100, kb: 100 };
+export const SIZE_DEFAULTS = { ui: 100, text: 100, kb: 100, width: 65 };
+const SIZE_KEYS = ['ui', 'text', 'width', 'kb'];
 
 const $ = (id) => document.getElementById(id);
 const clamp = (v, min, max, def) => (Number.isFinite(+v) ? Math.min(max, Math.max(min, +v)) : def);
 
 function sizes() {
   const s = { ...SIZE_DEFAULTS, ...getSettings().sizes };
-  return { ui: clamp(s.ui, 80, 150, 100), text: clamp(s.text, 70, 200, 100), kb: clamp(s.kb, 60, 150, 100) };
+  return { ui: clamp(s.ui, 80, 150, 100), text: clamp(s.text, 70, 200, 100), kb: clamp(s.kb, 60, 150, 100), width: clamp(s.width, 50, 100, 65) };
 }
 
 export function applyTheme(theme) {
@@ -39,7 +40,8 @@ export function applySizes(s = sizes()) {
   st.setProperty('--ui-scale', s.ui / 100);
   st.setProperty('--type-scale', s.text / 100);
   st.setProperty('--kb-scale', s.kb / 100);
-  for (const k of ['ui', 'text', 'kb']) {
+  st.setProperty('--page-w', s.width);
+  for (const k of SIZE_KEYS) {
     const out = $(`set-${k}-out`);
     if (out) out.textContent = `${s[k]} %`;
   }
@@ -91,7 +93,7 @@ export function initSettings() {
 
   // Größen: live anwenden, beim Loslassen speichern
   const s = sizes();
-  for (const k of ['ui', 'text', 'kb']) {
+  for (const k of SIZE_KEYS) {
     const input = $(`set-${k}`);
     input.value = s[k];
     input.addEventListener('input', () => applySizes({ ...sizes(), ...readSliders() }));
@@ -99,7 +101,7 @@ export function initSettings() {
   }
   $('set-reset').addEventListener('click', () => {
     saveSettings({ sizes: { ...SIZE_DEFAULTS } });
-    for (const k of ['ui', 'text', 'kb']) $(`set-${k}`).value = SIZE_DEFAULTS[k];
+    for (const k of SIZE_KEYS) $(`set-${k}`).value = SIZE_DEFAULTS[k];
     applySizes();
   });
 
@@ -109,5 +111,5 @@ export function initSettings() {
 }
 
 function readSliders() {
-  return { ui: +$('set-ui').value, text: +$('set-text').value, kb: +$('set-kb').value };
+  return Object.fromEntries(SIZE_KEYS.map((k) => [k, +$(`set-${k}`).value]));
 }

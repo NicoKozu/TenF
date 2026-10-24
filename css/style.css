@@ -28,6 +28,10 @@
   --ui-scale: 1;
   --type-scale: 1;
   --kb-scale: 1;
+  --page-w: 65; /* Inhaltsbreite in % der Fensterbreite */
+  /* Gemeinsame Breite für Kopfzeile und Inhalt; nie schmaler als 56rem (sofern Platz) */
+  --page-max: max(min(100vw, 56rem), calc(var(--page-w) * 1vw));
+  --page-pad: clamp(1rem, 3vw, 2rem);
   color-scheme: light;
 }
 
@@ -176,13 +180,17 @@ kbd {
 
 /* ===== Header & Tabs ===== */
 .site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: .75rem clamp(1rem, 4vw, 2rem);
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
   flex-wrap: wrap;
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: .75rem var(--page-pad);
 }
 .logo { margin: 0; font-size: 1.5rem; letter-spacing: -.02em; }
 .logo span { color: var(--accent); }
@@ -215,9 +223,9 @@ kbd {
 main {
   flex: 1;
   width: 100%;
-  max-width: 72rem;
+  max-width: var(--page-max);
   margin: 0 auto;
-  padding: 1.5rem clamp(1rem, 4vw, 2rem);
+  padding: 1.5rem var(--page-pad);
 }
 [role="tabpanel"]:focus-visible { outline-offset: 8px; }
 .tips { padding-left: 1.2rem; }
@@ -237,14 +245,12 @@ main {
 }
 
 /* ===== Virtuelle Tastatur ===== */
-.keyboard-wrap { overflow-x: auto; padding-bottom: .25rem; }
+.keyboard-wrap { overflow-x: auto; padding-bottom: .25rem; container-type: inline-size; }
 .keyboard {
   display: flex;
   flex-direction: column;
   gap: calc(5px * var(--kb-scale));
-  min-width: calc(640px * var(--kb-scale));
-  max-width: calc(60rem * var(--kb-scale));
-  margin-inline: auto;
+  min-width: 640px;
   padding: calc(10px * var(--kb-scale));
   background: var(--surface);
   border: 1px solid var(--border);
@@ -255,7 +261,8 @@ main {
 .key, .kb-gap { flex: var(--w, 1) 1 0; }
 .key {
   position: relative;
-  height: calc(3rem * var(--kb-scale));
+  /* volle Breite, Höhe wächst proportional mit (≈ quadratische Tasten bei 100 %) */
+  height: calc(max(2.6rem, 4.4cqw) * var(--kb-scale));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -263,12 +270,12 @@ main {
   background: var(--key-bg);
   color: var(--key-text);
   box-shadow: 0 2px 0 var(--key-shadow);
-  font: 600 calc(1rem * var(--kb-scale))/1 ui-monospace, monospace;
+  font: 600 calc(clamp(.9rem, 1.45cqw, 1.6rem) * var(--kb-scale))/1 ui-monospace, monospace;
   transition: transform .06s, box-shadow .06s, outline-color .1s;
   outline: 3px solid transparent;
   outline-offset: -3px;
 }
-.key.mod { font: 500 calc(.75rem * var(--kb-scale))/1 system-ui, sans-serif; }
+.key.mod { font: 500 calc(clamp(.7rem, 1.05cqw, 1.15rem) * var(--kb-scale))/1 system-ui, sans-serif; }
 .key.home::after {          /* Tastmarken auf F und J */
   content: "";
   position: absolute;

@@ -516,6 +516,7 @@ function bindEvents() {
   window.addEventListener('keyup', (e) => kb.release(e.code));
   window.addEventListener('blur', () => kb.releaseAll());
 
+  window.addEventListener('resize', () => { if (s && !$('lesson-view').hidden) updateCursor(); });
   window.addEventListener('tabchange', (e) => {
     if (!s) return;
     if (e.detail !== 'lernen' && s.start && !s.done) startExercise(cur.ex);

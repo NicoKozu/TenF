@@ -16,6 +16,7 @@
       if (z.ui) r.style.setProperty('--ui-scale', z.ui / 100);
       if (z.text) r.style.setProperty('--type-scale', z.text / 100);
       if (z.kb) r.style.setProperty('--kb-scale', z.kb / 100);
+      if (z.width) r.style.setProperty('--page-w', z.width);
       if (s.hideTrainKb) r.classList.add('hide-train-kb');
     } catch (e) { /* ignorieren */ }
   </script>
@@ -25,6 +26,7 @@
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header class="site-header">
+   <div class="header-inner">
     <h1 class="logo">Ten<span>F</span></h1>
     <nav class="tabs" role="tablist" aria-label="Bereiche">
       <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
@@ -32,7 +34,8 @@
       <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
       <button role="tab" id="tab-einstellungen" aria-controls="panel-einstellungen" aria-selected="false" tabindex="-1">Einstellungen</button>
     </nav>
-    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Farbschema wechseln">◐</button>
+    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Design wechseln">◐</button>
+   </div>
   </header>
 
   <main id="main">
@@ -243,7 +246,11 @@
           <input type="range" id="set-text" min="70" max="200" step="10" data-key="text">
           <output for="set-text" id="set-text-out"></output>
 
-          <label for="set-kb">Virtuelle Tastatur</label>
+          <label for="set-width">Inhaltsbreite (Tippfeld, Tastatur, alles)</label>
+          <input type="range" id="set-width" min="50" max="100" step="5" data-key="width">
+          <output for="set-width" id="set-width-out"></output>
+
+          <label for="set-kb">Virtuelle Tastatur (Höhe)</label>
           <input type="range" id="set-kb" min="60" max="150" step="5" data-key="kb">
           <output for="set-kb" id="set-kb-out"></output>
         </div>

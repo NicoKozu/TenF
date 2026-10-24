@@ -425,6 +425,7 @@ function bindEvents() {
   });
   window.addEventListener('keyup', (e) => kb.release(e.code));
   window.addEventListener('blur', () => kb.releaseAll());
+  window.addEventListener('resize', () => { if (s && !panel.hidden) updateCursor(); });
 
   // Tab verlassen → laufende Übung abbrechen (ohne Speichern)
   window.addEventListener('tabchange', (e) => {

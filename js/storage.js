@@ -7,7 +7,7 @@ const DATA_VERSION = 1;
 
 const DEFAULT_SETTINGS = {
   theme: 'system', // 'system' | 'light' | 'dark' | 'black' | 'beige' | 'lila'
-  sizes: { ui: 100, text: 100, kb: 100 }, // Prozent
+  sizes: { ui: 100, text: 100, kb: 100, width: 65 }, // Prozent (width = % der Fensterbreite)
   hideTrainKb: false,
   layout: 'de-qwertz',
 };

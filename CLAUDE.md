@@ -22,7 +22,7 @@ Web-App zum Lernen und Trainieren des 10-Finger-Schreibens. Gehostet über GitHu
 index.html            Tabs: Lernen / Training / Verlauf / Einstellungen
 css/style.css         Theme-Variablen, Fingerfarben, Layout
 js/main.js            Einstieg: Tabs, Initialisierung
-js/settings.js        Designs (System/Hell/Dunkel/Schwarz/Beige/Lila), Größen (--ui/--type/--kb-scale), Tastatur ausblenden
+js/settings.js        Designs (System/Hell/Dunkel/Schwarz/Beige/Lila), Größen (--ui/--type/--kb-scale, Inhaltsbreite --page-w → --page-max gilt für Kopfzeile + main), Tastatur ausblenden
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
