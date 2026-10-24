@@ -3,10 +3,26 @@ import { initSettings } from './settings.js';
 import { initTraining } from './training.js';
 import { initHistory } from './history.js';
 import { initLessons } from './lessons.js';
+import { attachCaret } from './caret.js';
 
 // ----- Tabs (WAI-ARIA Tabs-Pattern) -----
 function initTabs() {
   const tabs = [...document.querySelectorAll('[role="tab"]')];
+
+  const nav = document.querySelector('.tabs');
+  const ind = Object.assign(document.createElement('span'), { className: 'tab-ind' });
+  ind.setAttribute('aria-hidden', 'true');
+  nav.prepend(ind);
+  const moveInd = () => {
+    const t = tabs.find((x) => x.getAttribute('aria-selected') === 'true');
+    if (!t) return;
+    ind.style.width = `${t.offsetWidth}px`;
+    ind.style.height = `${t.offsetHeight}px`;
+    ind.style.transform = `translate(${t.offsetLeft}px, ${t.offsetTop}px)`;
+  };
+  window.addEventListener('resize', moveInd);
+  window.addEventListener('layoutchange', moveInd);
+  document.fonts?.ready.then(moveInd);
 
   function select(tab, focus = true) {
     tabs.forEach((t) => {
@@ -15,6 +31,7 @@ function initTabs() {
       t.tabIndex = on ? 0 : -1;
       document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
     });
+    moveInd();
     if (focus) tab.focus();
     const id = tab.id.replace('tab-', '');
     history.replaceState(null, '', '#' + id);
@@ -35,6 +52,7 @@ function initTabs() {
 
   const fromHash = () => document.getElementById('tab-' + location.hash.slice(1));
   if (fromHash()) select(fromHash(), false);
+  moveInd();
   window.addEventListener('hashchange', () => { if (fromHash()) select(fromHash()); });
 }
 
@@ -57,3 +75,5 @@ initTabs();
 initLessons();
 initTraining();
 initHistory();
+for (const id of ['typing-text', 'lv-text']) attachCaret(document.getElementById(id));
+requestAnimationFrame(() => document.documentElement.classList.add('ready'));

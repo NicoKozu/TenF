@@ -114,7 +114,7 @@ async function renderChart(list) {
   let Chart;
   try { Chart = await loadChart(); } catch (e) { desc.textContent = e.message; canvas.hidden = true; return; }
 
-  const c = { text: css('--muted'), grid: css('--border'), wpm: css('--accent'), acc: css('--ok') };
+  const c = { text: css('--muted'), grid: css('--line'), wpm: css('--accent'), acc: css('--ok') };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const data = {
     labels: list.map((s) => dShort.format(new Date(s.date))),

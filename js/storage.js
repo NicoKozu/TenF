@@ -6,7 +6,9 @@ const KEYS = { settings: 'settings', sessions: 'sessions', lessons: 'lessons' };
 const DATA_VERSION = 1;
 
 const DEFAULT_SETTINGS = {
-  theme: 'system', // 'system' | 'light' | 'dark' | 'black' | 'beige' | 'lila'
+  theme: 'system', // 'system' | 'custom' | Vorlagen-ID aus themes.js
+  custom: null, // eigene Palette { bg, bg2, glass, text, muted, accent, accent2, ok, err }
+  fx: {}, // Effekte, siehe FX_DEFAULTS in themes.js
   sizes: { ui: 100, text: 100, kb: 100, width: 65 }, // Prozent (width = % der Fensterbreite)
   hideTrainKb: false,
   layout: 'de-qwertz',

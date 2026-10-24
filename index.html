@@ -5,13 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261024234847">
+  <link rel="stylesheet" href="css/style.css?v=20261025000332">
+  <meta name="color-scheme" content="dark light">
   <script>
-    // Design und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
+    // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
     try {
       const s = JSON.parse(localStorage.getItem('tenf:settings') || '{}');
       const r = document.documentElement;
-      if (s.theme && s.theme !== 'system') r.dataset.theme = s.theme;
+      const c = s.cache;
+      if (c && c.light && c.dark) {
+        const v = matchMedia('(prefers-color-scheme: dark)').matches ? c.dark : c.light;
+        for (const k in v) r.style.setProperty(k, v[k]);
+        r.dataset.bg = c.bg || 'aurora';
+        r.dataset.caret = c.caret || 'line';
+        r.dataset.smooth = c.smooth === false ? '0' : '1';
+      }
       const z = s.sizes || {};
       if (z.ui) r.style.setProperty('--ui-scale', z.ui / 100);
       if (z.text) r.style.setProperty('--type-scale', z.text / 100);
@@ -23,34 +31,37 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/excel.js": "./js/excel.js?v=20261024234847",
-      "./js/history.js": "./js/history.js?v=20261024234847",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261024234847",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261024234847",
-      "./js/lessons.js": "./js/lessons.js?v=20261024234847",
-      "./js/main.js": "./js/main.js?v=20261024234847",
-      "./js/settings.js": "./js/settings.js?v=20261024234847",
-      "./js/storage.js": "./js/storage.js?v=20261024234847",
-      "./js/training.js": "./js/training.js?v=20261024234847",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261024234847"
+      "./js/caret.js": "./js/caret.js?v=20261025000332",
+      "./js/excel.js": "./js/excel.js?v=20261025000332",
+      "./js/history.js": "./js/history.js?v=20261025000332",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261025000332",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025000332",
+      "./js/lessons.js": "./js/lessons.js?v=20261025000332",
+      "./js/main.js": "./js/main.js?v=20261025000332",
+      "./js/settings.js": "./js/settings.js?v=20261025000332",
+      "./js/storage.js": "./js/storage.js?v=20261025000332",
+      "./js/themes.js": "./js/themes.js?v=20261025000332",
+      "./js/training.js": "./js/training.js?v=20261025000332",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261025000332"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261024234847"></script>
+  <script type="module" src="js/main.js?v=20261025000332"></script>
 </head>
 <body>
+  <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
 
   <header class="site-header">
    <div class="header-inner">
-    <h1 class="logo">Ten<span>F</span></h1>
+    <h1 class="logo"><span class="logo-mark" aria-hidden="true"></span>Ten<span>F</span></h1>
     <nav class="tabs" role="tablist" aria-label="Bereiche">
       <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
       <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="false" tabindex="-1">Training</button>
       <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
       <button role="tab" id="tab-einstellungen" aria-controls="panel-einstellungen" aria-selected="false" tabindex="-1">Einstellungen</button>
     </nav>
-    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Design wechseln">◐</button>
+    <button id="theme-toggle" class="icon-btn" type="button" aria-label="Design wechseln"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 0 0 0 18c1.1 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2Zm-5.5 9a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm3 4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg></button>
    </div>
   </header>
 
@@ -248,7 +259,56 @@
 
       <fieldset class="set-group">
         <legend>Design</legend>
+        <p class="hint">Wähle eine Vorlage – oder passe unten jede Farbe selbst an.</p>
         <div id="theme-picker" class="theme-picker"></div>
+        <div class="data-actions set-actions">
+          <button type="button" id="theme-random" class="btn">Zufällige Vorlage</button>
+          <button type="button" id="theme-dice" class="btn primary">🎲 Zufallsfarben</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="set-group">
+        <legend>Farben anpassen</legend>
+        <p class="hint">Jede Änderung erzeugt dein Design „Eigenes“ auf Basis des aktuellen. <span id="dark-note"></span></p>
+        <div id="color-editor" class="color-editor"></div>
+        <ul id="contrast-out" class="contrast-out" aria-label="Kontrastprüfung" role="status"></ul>
+        <div class="code-row">
+          <label for="theme-code">Design-Code</label>
+          <input type="text" id="theme-code" spellcheck="false" autocomplete="off" aria-describedby="code-msg">
+          <button type="button" id="code-copy" class="btn">Kopieren</button>
+          <button type="button" id="code-apply" class="btn">Übernehmen</button>
+        </div>
+        <p id="code-msg" class="hint msg" role="status"></p>
+      </fieldset>
+
+      <fieldset class="set-group">
+        <legend>Effekte</legend>
+        <div class="size-grid">
+          <label for="fx-blur">Glas-Unschärfe</label>
+          <input type="range" id="fx-blur" min="0" max="40" step="2">
+          <output for="fx-blur" id="fx-blur-out"></output>
+
+          <label for="fx-glass">Glas-Deckkraft</label>
+          <input type="range" id="fx-glass" min="20" max="100" step="5">
+          <output for="fx-glass" id="fx-glass-out"></output>
+
+          <label for="fx-radius">Eckenrundung</label>
+          <input type="range" id="fx-radius" min="0" max="28" step="2">
+          <output for="fx-radius" id="fx-radius-out"></output>
+
+          <label for="fx-finger">Fingerfarben auf der Tastatur</label>
+          <input type="range" id="fx-finger" min="0" max="70" step="5">
+          <output for="fx-finger" id="fx-finger-out"></output>
+        </div>
+        <div class="fx-selects">
+          <label>Hintergrund <select id="fx-bg" class="select"></select></label>
+          <label>Cursor <select id="fx-caret" class="select"></select></label>
+          <label>Schrift im Tippfeld <select id="fx-font" class="select"></select></label>
+        </div>
+        <label class="check set-check"><input type="checkbox" id="fx-smooth"> Cursor gleitet weich (statt zu springen)</label>
+        <div class="data-actions set-actions">
+          <button type="button" id="fx-reset" class="btn">Effekte zurücksetzen</button>
+        </div>
       </fieldset>
 
       <fieldset class="set-group">

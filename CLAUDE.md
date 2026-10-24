@@ -15,15 +15,17 @@ Web-App zum Lernen und Trainieren des 10-Finger-Schreibens. Gehostet über GitHu
 - Reines HTML/CSS/JS (ES-Module), kein Build, keine Frameworks. Chart.js liegt lokal in `js/vendor/` (keine Anfrage an Dritte), wird erst im Verlauf-Tab geladen.
 - Speicherung nur über `js/storage.js` (localStorage, Präfix `tenf:`) – später durch Backend austauschbar.
 - Layout: deutsches QWERTZ (ISO). Tasten werden über `event.code` (physische Position) zugeordnet.
-- Barrierearm (Kontraste ≥ 4,5:1, Tastaturbedienung, ARIA). Designs über `data-theme` auf `<html>`, Größen über CSS-Variablen; ein Inline-Skript im `<head>` setzt beides vor dem ersten Zeichnen.
+- Barrierearm (Kontraste ≥ 4,5:1, Tastaturbedienung, ARIA). Design = Palette (9 Farben) + Effekte → `deriveVars()` in `js/themes.js` erzeugt alle CSS-Variablen, die inline auf `<html>` gesetzt und als `settings.cache` (hell/dunkel) gespeichert werden; das Inline-Skript im `<head>` wendet den Cache vor dem ersten Zeichnen an. Glas-Look über `--glass`/`--blur`, Hintergrund-Stil über `data-bg`, Cursor über `data-caret`/`data-smooth`.
 - Kein Tracking, keine externen Datenübertragungen ohne Rückfrage.
 
 ## Struktur
 ```
 index.html            Tabs: Lernen / Training / Verlauf / Einstellungen
-css/style.css         Theme-Variablen, Fingerfarben, Layout
+css/style.css         Glas-Design: Startwerte der Variablen, Aurora-Hintergrund, Fingerfarben (color-mix mit --finger), Layout
 js/main.js            Einstieg: Tabs, Initialisierung
-js/settings.js        Designs (System/Hell/Dunkel/Schwarz/Beige/Lila), Größen (--ui/--type/--kb-scale, Inhaltsbreite --page-w → --page-max gilt für Kopfzeile + main), Tastatur ausblenden
+js/themes.js          12 Vorlagen, Effekt-Defaults, Farbhelfer/Kontrast, deriveVars, Design-Code (TENF-…)
+js/settings.js        Design-Auswahl, Farbeditor (Eigenes), Zufallsfarben, Effekte, Größen (--ui/--type/--kb-scale, Inhaltsbreite --page-w → --page-max gilt für Kopfzeile + main), Tastatur ausblenden
+js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur)
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
@@ -51,4 +53,5 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
 4. ✅ Lern-Lektionen (bestanden ab 90 % Genauigkeit; Fortschritt getrennt vom Verlauf)
 5. ✅ Deployment GitHub Pages (automatisch bei jedem Push)
    - ✅ Einstellungen: 5 Designs + System, Größenregler, Training: Modus „Eigener Text“
+   - ✅ Redesign: Glas-Look, 12 Vorlagen + eigene Farben, Effekte, gleitender Cursor, Fokus-Modus
 6. Optional: Accounts/Sync via Supabase (dann Impressum + Datenschutz)
