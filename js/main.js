@@ -1,5 +1,6 @@
 import { createKeyboard, renderLegend } from './keyboard.js';
 import { getSettings, saveSettings } from './storage.js';
+import { initTraining } from './training.js';
 
 // ----- Theme -----
 const THEMES = ['system', 'light', 'dark'];
@@ -36,7 +37,9 @@ function initTabs() {
       document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
     });
     if (focus) tab.focus();
-    history.replaceState(null, '', '#' + tab.id.replace('tab-', ''));
+    const id = tab.id.replace('tab-', '');
+    history.replaceState(null, '', '#' + id);
+    window.dispatchEvent(new CustomEvent('tabchange', { detail: id }));
   }
 
   tabs.forEach((tab, i) => {
@@ -69,5 +72,6 @@ function initLearnKeyboard() {
 }
 
 initTheme();
-initTabs();
 initLearnKeyboard();
+initTabs();
+initTraining();

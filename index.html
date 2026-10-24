@@ -45,7 +45,54 @@
 
     <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0" hidden>
       <h2>Training</h2>
-      <p class="placeholder">Trainingsmodus mit zufälligen Wörtern und Live-Auswertung folgt in Schritt 2.</p>
+      <form id="train-settings" class="train-settings" aria-label="Trainingseinstellungen">
+        <label>Länge
+          <select id="ts-length">
+            <optgroup label="Zeit">
+              <option value="t60">1 Minute</option>
+              <option value="t180">3 Minuten</option>
+              <option value="t300">5 Minuten</option>
+            </optgroup>
+            <optgroup label="Wörter">
+              <option value="w25">25 Wörter</option>
+              <option value="w50">50 Wörter</option>
+              <option value="w100">100 Wörter</option>
+            </optgroup>
+          </select>
+        </label>
+        <label>Fokus
+          <select id="ts-focus">
+            <option value="all">Alle Tasten</option>
+            <option value="home">Grundreihe</option>
+            <option value="home-top">Grund- + obere Reihe</option>
+            <option value="home-bottom">Grund- + untere Reihe</option>
+          </select>
+        </label>
+        <label>Finger
+          <select id="ts-finger"></select>
+        </label>
+        <label class="check"><input type="checkbox" id="ts-caps"> Großschreibung</label>
+        <label class="check"><input type="checkbox" id="ts-strict"> Bei Fehler stoppen</label>
+        <button type="button" id="ts-restart" class="btn">Neu starten (Esc)</button>
+      </form>
+
+      <div class="stats" role="group" aria-label="Live-Werte">
+        <div class="stat"><span class="stat-val" id="st-time">1:00</span><span class="stat-lbl" id="st-time-lbl">Restzeit</span></div>
+        <div class="stat" id="st-words-wrap" hidden><span class="stat-val" id="st-words">0</span><span class="stat-lbl">Wörter</span></div>
+        <div class="stat"><span class="stat-val" id="st-wpm">–</span><span class="stat-lbl">WPM</span></div>
+        <div class="stat"><span class="stat-val" id="st-acc">–</span><span class="stat-lbl">Genauigkeit</span></div>
+        <div class="stat"><span class="stat-val" id="st-err">0</span><span class="stat-lbl">Fehler</span></div>
+      </div>
+
+      <div id="typing-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
+           aria-label="Übungstext – hier tippen" aria-describedby="next-key">
+        <div class="typing-view"><div id="typing-text" class="typing-text"></div></div>
+        <p class="typing-overlay" aria-hidden="true">Hier klicken oder einfach lostippen</p>
+      </div>
+      <p id="next-key" class="hint next-key"></p>
+      <div id="train-result" class="result" role="status" hidden></div>
+
+      <div id="keyboard-training" class="keyboard-wrap"></div>
     </section>
 
     <section role="tabpanel" id="panel-verlauf" aria-labelledby="tab-verlauf" tabindex="0" hidden>

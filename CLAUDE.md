@@ -23,6 +23,7 @@ index.html            Tabs: Lernen / Training / Verlauf
 css/style.css         Theme-Variablen, Fingerfarben, Layout
 js/main.js            Einstieg: Tabs, Theme, Initialisierung
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
+js/training.js        Trainingsmodus: Wortgenerator, Tipp-Engine, Live-Werte, Session speichern
 js/storage.js         Einstellungen, Sessions, Export/Import
 data/wordlist-de.json Deutsche Wortliste
 ```
@@ -36,7 +37,7 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
 
 ## Roadmap
 1. ✅ Grundgerüst + Tabs + virtuelle Tastatur
-2. Trainingsmodus mit Wortliste und Live-Auswertung
+2. ✅ Trainingsmodus mit Wortliste und Live-Auswertung
 3. Verlauf mit localStorage + Diagramm
 4. Lern-Lektionen
 5. Deployment GitHub Pages

@@ -93,6 +93,13 @@ export function fingerForCode(code) {
   return KEY_BY_CODE.get(code)?.finger ?? null;
 }
 
+/** Anzeigename einer Taste (Buchstaben groß). */
+export function labelForCode(code) {
+  if (code === 'Space') return 'Leertaste';
+  const label = KEY_BY_CODE.get(code)?.label ?? code;
+  return label.length === 1 && label !== 'ß' ? label.toUpperCase() : label;
+}
+
 /**
  * Rendert die Tastatur in `container` und liefert ein Steuerobjekt.
  */
