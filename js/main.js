@@ -1,6 +1,7 @@
 import { createKeyboard, renderLegend } from './keyboard.js';
 import { getSettings, saveSettings } from './storage.js';
 import { initTraining } from './training.js';
+import { initHistory } from './history.js';
 
 // ----- Theme -----
 const THEMES = ['system', 'light', 'dark'];
@@ -13,6 +14,7 @@ function applyTheme(theme) {
   const btn = document.getElementById('theme-toggle');
   btn.setAttribute('aria-label', `Farbschema: ${THEME_LABEL[theme]} (klicken zum Wechseln)`);
   btn.title = `Farbschema: ${THEME_LABEL[theme]}`;
+  window.dispatchEvent(new Event('themechange'));
 }
 
 function initTheme() {
@@ -22,6 +24,9 @@ function initTheme() {
     const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
     saveSettings({ theme: next });
     applyTheme(next);
+  });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (getSettings().theme === 'system') window.dispatchEvent(new Event('themechange'));
   });
 }
 
@@ -54,8 +59,9 @@ function initTabs() {
     });
   });
 
-  const fromHash = document.getElementById('tab-' + location.hash.slice(1));
-  if (fromHash) select(fromHash, false);
+  const fromHash = () => document.getElementById('tab-' + location.hash.slice(1));
+  if (fromHash()) select(fromHash(), false);
+  window.addEventListener('hashchange', () => { if (fromHash()) select(fromHash()); });
 }
 
 // ----- Tastatur-Demo im Lernen-Tab -----
@@ -75,3 +81,4 @@ initTheme();
 initLearnKeyboard();
 initTabs();
 initTraining();
+initHistory();

@@ -123,7 +123,7 @@ function reset() {
     chars: [], spans: [], typed: [], pos: 0,
     start: 0, timer: null, done: false,
     strokes: 0, correctStrokes: 0, correctChars: 0,
-    errorsByKey: {}, errorsByFinger: {},
+    errorsByKey: {}, errorsByFinger: {}, hitsByKey: {},
   };
   textEl.replaceChildren();
   textEl.style.transform = '';
@@ -183,11 +183,12 @@ function input(ch, code) {
   if (!s.start) start();
   const expected = s.chars[s.pos];
   const ok = ch === expected;
+  const info = keyForChar(expected);
   s.strokes++;
+  if (info) inc(s.hitsByKey, info.code);
   if (ok) {
     s.correctStrokes++;
   } else {
-    const info = keyForChar(expected);
     if (info) { inc(s.errorsByKey, info.code); inc(s.errorsByFinger, info.finger); }
     kb.flashWrong(code);
     if (cfg.strict) {
@@ -288,6 +289,7 @@ function finish() {
       errors: r.errors,
       errorsByKey: s.errorsByKey,
       errorsByFinger: s.errorsByFinger,
+      hitsByKey: s.hitsByKey,
     });
   }
   showResult(r);

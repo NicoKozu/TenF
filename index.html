@@ -97,7 +97,65 @@
 
     <section role="tabpanel" id="panel-verlauf" aria-labelledby="tab-verlauf" tabindex="0" hidden>
       <h2>Verlauf &amp; Statistik</h2>
-      <p class="placeholder">Gespeicherte Sessions, Diagramm und Schwachstellen-Analyse folgen in Schritt 3.</p>
+      <p id="hist-empty" class="placeholder" hidden>Noch keine Sessions gespeichert. Absolviere ein <a href="#training">Training</a> – danach erscheint hier dein Fortschritt.</p>
+
+      <div id="hist-content" hidden>
+        <div id="hist-summary" class="stats" role="group" aria-label="Kennzahlen"></div>
+
+        <div class="section-head">
+          <h3>Fortschritt</h3>
+          <label class="inline-label">Zeitraum
+            <select id="hist-range" class="select">
+              <option value="0">Gesamt</option>
+              <option value="30">30 Tage</option>
+              <option value="7">7 Tage</option>
+            </select>
+          </label>
+        </div>
+        <figure class="chart-box">
+          <div class="chart-wrap"><canvas id="hist-chart" role="img"></canvas></div>
+          <figcaption id="hist-chart-desc" class="hint"></figcaption>
+        </figure>
+
+        <h3>Schwachstellen</h3>
+        <p id="weak-note" class="hint"></p>
+        <div class="weak-grid">
+          <div>
+            <h4>Tasten</h4>
+            <ol id="weak-keys" class="bars"></ol>
+          </div>
+          <div>
+            <h4>Finger (Fehler)</h4>
+            <ol id="weak-fingers" class="bars"></ol>
+          </div>
+        </div>
+        <p class="hint">Fehler-Heatmap: je kräftiger rot, desto fehleranfälliger die Taste.</p>
+        <div id="keyboard-heat" class="keyboard-wrap"></div>
+
+        <h3>Sessions</h3>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Session-Tabelle">
+          <table class="hist-table">
+            <thead>
+              <tr><th scope="col">Datum</th><th scope="col">Länge</th><th scope="col">Fokus</th><th scope="col" class="num">Dauer</th>
+                <th scope="col" class="num">WPM</th><th scope="col" class="num">Genauigkeit</th><th scope="col" class="num">Fehler</th>
+                <th scope="col"><span class="visually-hidden">Aktion</span></th></tr>
+            </thead>
+            <tbody id="hist-rows"></tbody>
+          </table>
+        </div>
+        <button type="button" id="hist-more" class="btn" hidden></button>
+      </div>
+
+      <h3>Daten</h3>
+      <p class="hint">Alles liegt nur in diesem Browser. Mit Export/Import sicherst du den Verlauf oder überträgst ihn auf ein anderes Gerät (Import ergänzt, überschreibt nichts).</p>
+      <div class="data-actions">
+        <button type="button" id="hist-export" class="btn">Exportieren (JSON)</button>
+        <label class="btn file-btn">Importieren
+          <input type="file" id="hist-import" accept=".json,application/json" class="visually-hidden">
+        </label>
+        <button type="button" id="hist-clear" class="btn danger">Verlauf löschen</button>
+      </div>
+      <p id="hist-msg" class="hint msg" role="status"></p>
     </section>
   </main>
 

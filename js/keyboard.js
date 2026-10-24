@@ -146,6 +146,17 @@ export function createKeyboard(container) {
     press(code) { els.get(code)?.classList.add('pressed'); },
     release(code) { els.get(code)?.classList.remove('pressed'); },
     releaseAll() { clear('pressed'); },
+    /** Fehler-Heatmap: {code: Wert}. Leeres Objekt/null schaltet sie aus. */
+    heat(map) {
+      const vals = Object.values(map ?? {});
+      const max = vals.length ? Math.max(...vals) : 0;
+      kb.classList.toggle('heatmap', max > 0);
+      els.forEach((el, code) => {
+        const v = map?.[code] ?? 0;
+        el.style.setProperty('--heat', max ? (v / max).toFixed(2) : 0);
+        el.classList.toggle('hot', v > 0);
+      });
+    },
     /** Kurz eine Taste als falsch markieren. */
     flashWrong(code, ms = 300) {
       const el = els.get(code);

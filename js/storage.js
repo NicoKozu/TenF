@@ -67,14 +67,27 @@ export function exportData() {
 
 /** Importiert JSON (String). Wirft bei ungültigen Daten. merge=true hängt Sessions an. */
 export function importData(json, { merge = false } = {}) {
-  const data = JSON.parse(json);
+  let data;
+  try { data = JSON.parse(json); } catch { throw new Error('Datei ist kein gültiges JSON.'); }
   if (data?.app !== 'tenf' || !Array.isArray(data.sessions)) {
     throw new Error('Keine gültige TenF-Datei.');
   }
+  if (data.version > DATA_VERSION) throw new Error('Datei stammt aus einer neueren TenF-Version.');
+  const valid = data.sessions.every((x) => x && typeof x.date === 'string' && Number.isFinite(x.wpm));
+  if (!valid) throw new Error('Datei enthält ungültige Sessions.');
   const sessions = merge ? mergeById(getSessions(), data.sessions) : data.sessions;
   write(KEYS.sessions, sessions);
   if (data.settings) saveSettings(data.settings);
   return sessions.length;
+}
+
+export function deleteSession(id) {
+  write(KEYS.sessions, getSessions().filter((s) => s.id !== id));
+}
+
+/** Nur den Verlauf löschen, Einstellungen bleiben. */
+export function clearSessions() {
+  try { localStorage.removeItem(PREFIX + KEYS.sessions); } catch { /* ignorieren */ }
 }
 
 export function clearAll() {
