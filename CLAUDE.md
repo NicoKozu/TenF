@@ -25,7 +25,7 @@ css/style.css         Glas-Design: Startwerte der Variablen, Aurora-Hintergrund,
 js/main.js            Einstieg: Tabs, Initialisierung
 js/themes.js          12 Vorlagen, Effekt-Defaults, Farbhelfer/Kontrast, deriveVars, Design-Code (TENF-…)
 js/settings.js        Design-Auswahl, Farbeditor (Eigenes), Zufallsfarben, Effekte, Größen (--ui/--type/--kb-scale, Inhaltsbreite --page-w → --page-max gilt für Kopfzeile + main), Tastatur ausblenden
-js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur)
+js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur); Tippfeld einzeilig, Text läuft per translateX, aktuelles Zeichen mittig
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)

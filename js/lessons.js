@@ -404,8 +404,7 @@ function updateCursor() {
   const span = s.spans[s.pos];
   if (!span || s.done) { kb.clearHighlight(); return; }
   span.classList.add('cur');
-  const lh = parseFloat(getComputedStyle(textEl).lineHeight) || 40;
-  textEl.style.transform = `translateY(${-Math.max(0, span.offsetTop - lh)}px)`;
+  textEl.style.transform = `translateX(${textEl.parentElement.clientWidth / 2 - span.offsetLeft}px)`;
 
   const ch = s.chars[s.pos];
   kb.highlightChar(ch);

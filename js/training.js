@@ -310,10 +310,8 @@ function updateCursor() {
   if (!cur || s.done || s.empty) { kb.clearHighlight(); return; }
   cur.classList.add('cur');
 
-  // Aktuelle Zeile als zweite Zeile halten
-  const lh = parseFloat(getComputedStyle(textEl).lineHeight) || 40;
-  const offset = Math.max(0, cur.offsetTop - lh);
-  textEl.style.transform = `translateY(${-offset}px)`;
+  // Eine Zeile: aktuelles Zeichen bleibt in der Mitte, Text läuft nach links
+  textEl.style.transform = `translateX(${textEl.parentElement.clientWidth / 2 - cur.offsetLeft}px)`;
 
   kb.highlightChar(s.chars[s.pos]);
 }
