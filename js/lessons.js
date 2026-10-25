@@ -477,12 +477,21 @@ function showResult(r, passed, lessonJustDone) {
 }
 
 // ----- Events -----
+let tabArmed = false;
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return;
+  // Tab + Leertaste = Neustart (2× Tab = normal weiter zu den Buttons)
+  if (e.key === 'Tab' && !e.shiftKey && !e.altKey) {
+    if (tabArmed) { tabArmed = false; return; }
+    e.preventDefault(); tabArmed = true; return;
+  }
+  if (tabArmed) {
+    tabArmed = false;
+    if (e.key === ' ') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
+  }
   if (e.key === 'Escape') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
   if (s.done) {
     if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); $('lesson-again')?.focus(); }
     return;
   }
   if (e.key.length !== 1) return;
@@ -507,6 +516,7 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
+    if (e.key === 'Tab' && (t === document.body || t === panel || t === view)) { box.focus(); onKey(e); return; }
     if (e.key === 'Enter' && !s.done && !t.matches?.('button, a, [role="tab"], label')) { e.preventDefault(); box.focus(); return; }
     if (s.done || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ' && t.matches?.('button, [role="tab"]')) return;

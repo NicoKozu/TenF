@@ -425,13 +425,21 @@ function showResult(r) {
 }
 
 // ----- Events -----
+let tabArmed = false;
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return; // Browser-Kürzel nicht abfangen
+  // Tab + Leertaste = Neustart (2× Tab = normal weiter zu den Buttons)
+  if (e.key === 'Tab' && !e.shiftKey && !e.altKey) {
+    if (tabArmed) { tabArmed = false; return; }
+    e.preventDefault(); tabArmed = true; return;
+  }
+  if (tabArmed) {
+    tabArmed = false;
+    if (e.key === ' ') { e.preventDefault(); reset(); box.focus(); return; }
+  }
   if (e.key === 'Escape') { e.preventDefault(); reset(); box.focus(); return; }
   if (s.done) {
-    // Nach dem Ende: Leertaste tut nichts, Tab springt zu „Nochmal“ (dann Leertaste = neue Runde)
-    if (e.key === ' ') e.preventDefault();
-    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); $('train-again')?.focus(); }
+    if (e.key === ' ') e.preventDefault(); // Nach dem Ende: Leertaste allein tut nichts
     return;
   }
   if (s.empty) return;
@@ -453,6 +461,7 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
+    if (e.key === 'Tab' && (t === document.body || t === panel)) { box.focus(); onKey(e); return; }
     // Enter setzt den Fokus ins Tippfeld
     if (e.key === 'Enter' && !s.done && !t.matches?.('button, a, [role="tab"], label')) { e.preventDefault(); box.focus(); return; }
     if (s.done || s.empty || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
