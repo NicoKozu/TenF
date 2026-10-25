@@ -32,6 +32,8 @@ export async function initTraining() {
   setupForm();
   bindEvents();
   await useList(cfg.list);
+  // Sofort lostippen: Fokus direkt ins Tippfeld, wenn Training offen ist
+  if (!panel.hidden && (document.activeElement === document.body || !document.activeElement)) box.focus({ preventScroll: true });
 }
 
 async function useList(id) {
@@ -451,7 +453,7 @@ function bindEvents() {
     const t = e.target;
     if (t.matches?.('input, select, textarea')) return;
     if (e.key === 'Escape') { onKey(e); return; }
-    // Enter blendet die Abdeckung aus und setzt den Fokus ins Tippfeld
+    // Enter setzt den Fokus ins Tippfeld
     if (e.key === 'Enter' && !s.done && !t.matches?.('button, a, [role="tab"], label')) { e.preventDefault(); box.focus(); return; }
     if (s.done || s.empty || e.key.length !== 1 || e.ctrlKey || e.metaKey) return;
     if (e.key === ' ' && t.matches?.('button, [role="tab"]')) return; // Leertaste aktiviert Buttons

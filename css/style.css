@@ -487,20 +487,8 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--a
 }
 .caret.idle { animation: blink 1.05s ease-in-out infinite; }
 @keyframes blink { 50% { opacity: .15; } }
-.typing-box:not(:focus) .caret, .typing-box.done .caret { opacity: 0; animation: none; }
+.typing-box.done .caret { opacity: 0; animation: none; }
 
-.typing-overlay {
-  position: absolute; inset: 0; margin: 0;
-  display: flex; align-items: center; justify-content: center; gap: .5rem;
-  background: color-mix(in srgb, var(--glass-solid) 55%, transparent);
-  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
-  color: var(--text); font-weight: 650; letter-spacing: .01em;
-  pointer-events: none;
-  border-radius: inherit;
-}
-.typing-overlay::before { content: "⌨"; font-size: 1.4em; opacity: .8; }
-.typing-box:focus .typing-overlay,
-.typing-box.done .typing-overlay { display: none; }
 .typing-box.done .typing-text { opacity: .5; }
 
 .next-key { min-height: 1.6em; margin: .6rem 0 .8rem; text-align: center; }

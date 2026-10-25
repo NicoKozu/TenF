@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261025005804">
+  <link rel="stylesheet" href="css/style.css?v=20261025113641">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,24 +31,24 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261025005804",
-      "./js/excel.js": "./js/excel.js?v=20261025005804",
-      "./js/history.js": "./js/history.js?v=20261025005804",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261025005804",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025005804",
-      "./js/lessons.js": "./js/lessons.js?v=20261025005804",
-      "./js/main.js": "./js/main.js?v=20261025005804",
-      "./js/settings.js": "./js/settings.js?v=20261025005804",
-      "./js/storage.js": "./js/storage.js?v=20261025005804",
-      "./js/themes.js": "./js/themes.js?v=20261025005804",
-      "./js/tips.js": "./js/tips.js?v=20261025005804",
-      "./js/training.js": "./js/training.js?v=20261025005804",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261025005804",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261025005804"
+      "./js/caret.js": "./js/caret.js?v=20261025113641",
+      "./js/excel.js": "./js/excel.js?v=20261025113641",
+      "./js/history.js": "./js/history.js?v=20261025113641",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261025113641",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261025113641",
+      "./js/lessons.js": "./js/lessons.js?v=20261025113641",
+      "./js/main.js": "./js/main.js?v=20261025113641",
+      "./js/settings.js": "./js/settings.js?v=20261025113641",
+      "./js/storage.js": "./js/storage.js?v=20261025113641",
+      "./js/themes.js": "./js/themes.js?v=20261025113641",
+      "./js/tips.js": "./js/tips.js?v=20261025113641",
+      "./js/training.js": "./js/training.js?v=20261025113641",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261025113641",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261025113641"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261025005804"></script>
+  <script type="module" src="js/main.js?v=20261025113641"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -58,8 +58,8 @@
    <div class="header-inner">
     <h1 class="logo"><span class="logo-mark" aria-hidden="true"></span>Ten<span>F</span></h1>
     <nav class="tabs" role="tablist" aria-label="Bereiche">
-      <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="true">Lernen</button>
-      <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="false" tabindex="-1">Training</button>
+      <button role="tab" id="tab-training" aria-controls="panel-training" aria-selected="true">Training</button>
+      <button role="tab" id="tab-lernen" aria-controls="panel-lernen" aria-selected="false" tabindex="-1">Lernen</button>
       <button role="tab" id="tab-verlauf" aria-controls="panel-verlauf" aria-selected="false" tabindex="-1">Verlauf</button>
       <button role="tab" id="tab-tipps" aria-controls="panel-tipps" aria-selected="false" tabindex="-1">Tipps</button>
       <button role="tab" id="tab-einstellungen" aria-controls="panel-einstellungen" aria-selected="false" tabindex="-1">Einstellungen</button>
@@ -69,7 +69,7 @@
   </header>
 
   <main id="main">
-    <section role="tabpanel" id="panel-lernen" aria-labelledby="tab-lernen" tabindex="0">
+    <section role="tabpanel" id="panel-lernen" aria-labelledby="tab-lernen" tabindex="0" hidden>
      <div id="learn-home">
       <h2>Das 10-Finger-System</h2>
       <p>Jeder Finger ist für feste Tasten zuständig. Ausgangspunkt ist die <strong>Grundstellung</strong>:
@@ -115,7 +115,6 @@
       <div id="lv-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
            aria-label="Übungstext – hier tippen">
         <div class="typing-view"><div id="lv-text" class="typing-text"></div></div>
-        <p class="typing-overlay" aria-hidden="true">Enter drücken oder klicken zum Starten</p>
       </div>
       <div id="lv-result" class="result" role="status" hidden></div>
       <p class="hint">Gedimmte Tasten kommen erst in späteren Lektionen, umrandete sind neu.</p>
@@ -123,7 +122,7 @@
      </div>
     </section>
 
-    <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0" hidden>
+    <section role="tabpanel" id="panel-training" aria-labelledby="tab-training" tabindex="0">
       <h2>Training</h2>
       <form id="train-settings" class="train-settings" aria-label="Trainingseinstellungen">
         <label>Modus
@@ -191,7 +190,6 @@
       <div id="typing-box" class="typing-box" tabindex="0" role="textbox" aria-readonly="false"
            aria-label="Übungstext – hier tippen">
         <div class="typing-view"><div id="typing-text" class="typing-text"></div></div>
-        <p class="typing-overlay" aria-hidden="true">Enter drücken oder klicken zum Starten</p>
       </div>
       <div id="train-result" class="result" role="status" hidden></div>
 

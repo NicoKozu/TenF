@@ -20,7 +20,7 @@ Web-App zum Lernen und Trainieren des 10-Finger-Schreibens. Gehostet über GitHu
 
 ## Struktur
 ```
-index.html            Tabs: Lernen / Training / Verlauf / Tipps / Einstellungen
+index.html            Tabs: Training (Start) / Lernen / Verlauf / Tipps / Einstellungen
 css/style.css         Glas-Design: Startwerte der Variablen, Aurora-Hintergrund, Fingerfarben (color-mix mit --finger), Layout
 js/main.js            Einstieg: Tabs, Initialisierung
 js/themes.js          12 Vorlagen, Effekt-Defaults, Farbhelfer/Kontrast, deriveVars, Design-Code (TENF-…)

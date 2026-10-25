@@ -52,7 +52,7 @@ function initTabs() {
   });
 
   const fromHash = () => document.getElementById('tab-' + location.hash.slice(1));
-  if (fromHash()) select(fromHash(), false);
+  select(fromHash() || tabs[0], false); // Standard: Training
   moveInd();
   window.addEventListener('hashchange', () => { if (fromHash()) select(fromHash()); });
 }
