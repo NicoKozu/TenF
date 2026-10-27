@@ -469,9 +469,9 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--a
 .typing-view:not(:has(.ch)) .typing-text { width: auto; white-space: normal; }
 .typing-text .word { white-space: nowrap; }
 .ch.ok  { color: color-mix(in srgb, var(--text) 42%, transparent); }
-.ch.bad { color: var(--err); text-decoration: underline wavy; text-underline-offset: 5px; text-decoration-thickness: 1.5px; }
+.ch.bad { color: var(--err); }
 .ch.sp.bad { background: color-mix(in srgb, var(--err) 28%, transparent); border-radius: 4px; text-decoration: none; }
-.ch.bad.had-err { color: var(--err); text-decoration: underline wavy; }
+.ch.bad.had-err { color: var(--err); }
 .ch.miss { animation: miss .3s; }
 @keyframes miss { 0%, 100% { background: transparent; } 30% { background: color-mix(in srgb, var(--err) 40%, transparent); } }
 
