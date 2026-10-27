@@ -415,8 +415,12 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--a
   padding: .45rem .9rem; font-size: .9rem; color: var(--text);
   background: var(--glass); border: 1px solid var(--line); border-radius: 999px; cursor: pointer;
 }
-.train-settings label.check:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--glass)); }
-.train-settings input[type="checkbox"] { width: 1rem; height: 1rem; margin: 0; }
+.train-settings label.check { position: relative; color: var(--muted); user-select: none; transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease); }
+.train-settings label.check:hover { border-color: var(--line-2); color: var(--text); }
+/* An = Akzentfarbe (Haken selbst ist unsichtbar, bleibt aber für Screenreader/Tastatur da) */
+.train-settings label.check:has(input:checked) { border-color: transparent; background: var(--accent); color: var(--accent-text); }
+.train-settings label.check:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.train-settings input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
 .train-settings [hidden] { display: none !important; }
 
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); gap: .6rem; margin-bottom: 1rem; }
@@ -767,7 +771,6 @@ body:has(.typing-box.running:focus) .stat .stat-lbl { display: none; }
 }
 .train-settings input[type="number"]:hover { border-color: var(--accent); }
 .train-settings input[type="number"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.site-footer .credit { font-size: .75rem; opacity: .8; }
 .typing-box { margin-bottom: 1rem; }
 
 /* ===== Tipps ===== */

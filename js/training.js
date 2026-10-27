@@ -98,7 +98,6 @@ function setupForm() {
   $('train-settings').addEventListener('change', apply);
   $('ts-custom-apply').addEventListener('click', () => { apply(); box.focus(); });
   $('train-settings').addEventListener('submit', (e) => { e.preventDefault(); apply(); box.focus(); });
-  $('ts-restart').addEventListener('click', () => { reset(); box.focus(); });
 }
 
 /**

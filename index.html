@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261027154029">
+  <link rel="stylesheet" href="css/style.css?v=20261027154743">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,24 +31,24 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261027154029",
-      "./js/excel.js": "./js/excel.js?v=20261027154029",
-      "./js/history.js": "./js/history.js?v=20261027154029",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261027154029",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027154029",
-      "./js/lessons.js": "./js/lessons.js?v=20261027154029",
-      "./js/main.js": "./js/main.js?v=20261027154029",
-      "./js/settings.js": "./js/settings.js?v=20261027154029",
-      "./js/storage.js": "./js/storage.js?v=20261027154029",
-      "./js/themes.js": "./js/themes.js?v=20261027154029",
-      "./js/tips.js": "./js/tips.js?v=20261027154029",
-      "./js/training.js": "./js/training.js?v=20261027154029",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261027154029",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261027154029"
+      "./js/caret.js": "./js/caret.js?v=20261027154743",
+      "./js/excel.js": "./js/excel.js?v=20261027154743",
+      "./js/history.js": "./js/history.js?v=20261027154743",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261027154743",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027154743",
+      "./js/lessons.js": "./js/lessons.js?v=20261027154743",
+      "./js/main.js": "./js/main.js?v=20261027154743",
+      "./js/settings.js": "./js/settings.js?v=20261027154743",
+      "./js/storage.js": "./js/storage.js?v=20261027154743",
+      "./js/themes.js": "./js/themes.js?v=20261027154743",
+      "./js/tips.js": "./js/tips.js?v=20261027154743",
+      "./js/training.js": "./js/training.js?v=20261027154743",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261027154743",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261027154743"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261027154029"></script>
+  <script type="module" src="js/main.js?v=20261027154743"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -163,7 +163,6 @@
         </div>
         <label class="check words-only"><input type="checkbox" id="ts-caps"> Großschreibung</label>
         <label class="check"><input type="checkbox" id="ts-strict"> Bei Fehler stoppen</label>
-        <button type="button" id="ts-restart" class="btn">Neu starten (Tab + Enter)</button>
         <div id="ts-custom-wrap" class="custom-wrap" hidden>
           <label for="ts-custom">Dein Text</label>
           <textarea id="ts-custom" rows="4" maxlength="5000" spellcheck="false"
@@ -362,7 +361,6 @@
 
   <footer class="site-footer">
     <p>Alle Daten bleiben lokal in deinem Browser. Kein Tracking.</p>
-    <p class="credit">Wortlisten: <a href="https://github.com/hermitdave/FrequencyWords" rel="noopener">FrequencyWords</a> (CC BY-SA 4.0)</p>
   </footer>
 </body>
 </html>
