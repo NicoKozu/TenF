@@ -603,10 +603,59 @@ body:has(.typing-box.running:focus) .stat .stat-lbl { display: none; }
 .msg:empty { display: none; }
 
 /* ===== Lektionen ===== */
-#learn-home h4 { margin: 1.5rem 0 .6rem; font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-#lesson-reset { margin-top: 1.75rem; }
-#lesson-continue { padding: .7rem 1.5rem; font-size: 1.05rem; }
-.lesson-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .65rem; }
+/* Leiste oben – wie die Trainingseinstellungen */
+.learn-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.25rem; margin-bottom: 1.25rem; }
+#lesson-continue { padding: .65rem 1.4rem; font-size: 1rem; }
+#lesson-continue[hidden] { display: none; }
+.learn-prog { display: flex; flex-direction: column; gap: .35rem; min-width: 12rem; flex: 1 1 12rem; max-width: 22rem; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.prog-bar { height: .45rem; border-radius: 99px; background: var(--line); overflow: hidden; }
+.prog-bar > span { display: block; height: 100%; width: 0; background: var(--grad); border-radius: inherit; transition: width .6s var(--ease); }
+.learn-jump { display: flex; flex-wrap: wrap; gap: .4rem; margin-left: auto; }
+.learn-jump a {
+  padding: .4rem .85rem; font-size: .85rem; font-weight: 600; color: var(--muted); text-decoration: none;
+  background: var(--glass); border: 1px solid var(--line); border-radius: 999px;
+  transition: color .2s var(--ease), border-color .2s var(--ease);
+}
+.learn-jump a:hover { color: var(--text); border-color: var(--line-2); }
+.learn-jump a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.learn-sec { scroll-margin-top: 6rem; margin-bottom: 2.25rem; }
+.learn-sec .section-head { margin-bottom: .25rem; }
+.learn-sec .section-head h3 { margin: 0 0 .5rem; }
+.learn-sec .section-head h3:focus { outline: none; }
+.learn-sec .section-head .hint { font-size: .85rem; margin: 0 0 .5rem; }
+
+#learn-lessons h4 { display: flex; align-items: center; gap: .5rem; margin: 1.1rem 0 .55rem; font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+#learn-lessons h4:first-child { margin-top: .25rem; }
+.g-count { padding: .05rem .5rem; font-size: .72rem; letter-spacing: .02em; border-radius: 999px; background: var(--line); color: var(--muted); }
+.g-count.full { background: color-mix(in srgb, var(--ok) 22%, transparent); color: var(--ok); }
+
+.learn-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.learn-card { padding: 1.1rem 1.25rem; }
+.learn-card h4 { margin: 0 0 .6rem; font-size: 1rem; }
+.learn-card > p { margin: 0 0 .75rem; }
+.learn-card .keyboard-wrap { margin-top: .5rem; }
+.tips.compact { grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .4rem; margin: 0; font-size: .9rem; }
+.tips.compact li { padding: .5rem .7rem .5rem 2rem; }
+.tips.compact li::before { left: .75rem; top: .85rem; width: .55rem; height: .55rem; }
+
+.example-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem; }
+.example-card { display: flex; flex-direction: column; gap: .6rem; }
+.ex-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.ex-head h4 { margin: 0; }
+.ex-level { flex: none; padding: .1rem .55rem; font-size: .72rem; font-weight: 700; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em; }
+.lvl-leicht { background: color-mix(in srgb, var(--ok) 20%, transparent); color: var(--ok); }
+.lvl-mittel { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+.lvl-schwer { background: color-mix(in srgb, var(--err) 18%, transparent); color: var(--err); }
+.ex-preview {
+  margin: 0; font: .9rem/1.5 var(--font-type); color: var(--muted);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
+}
+.ex-foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: auto; }
+.ex-foot .hint { font-size: .8rem; }
+.learn-foot { display: flex; justify-content: flex-end; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+
+.lesson-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: .6rem; }
 .lesson-card {
   width: 100%; height: 100%;
   display: grid; grid-template-columns: 2.2rem 1fr; grid-template-areas: "num title" "num keys" "num status";

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261027155935">
+  <link rel="stylesheet" href="css/style.css?v=20261027161224">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,25 +31,27 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261027155935",
-      "./js/dropdown.js": "./js/dropdown.js?v=20261027155935",
-      "./js/excel.js": "./js/excel.js?v=20261027155935",
-      "./js/history.js": "./js/history.js?v=20261027155935",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261027155935",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027155935",
-      "./js/lessons.js": "./js/lessons.js?v=20261027155935",
-      "./js/main.js": "./js/main.js?v=20261027155935",
-      "./js/settings.js": "./js/settings.js?v=20261027155935",
-      "./js/storage.js": "./js/storage.js?v=20261027155935",
-      "./js/themes.js": "./js/themes.js?v=20261027155935",
-      "./js/tips.js": "./js/tips.js?v=20261027155935",
-      "./js/training.js": "./js/training.js?v=20261027155935",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261027155935",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261027155935"
+      "./js/caret.js": "./js/caret.js?v=20261027161224",
+      "./js/dropdown.js": "./js/dropdown.js?v=20261027161224",
+      "./js/examples-data.js": "./js/examples-data.js?v=20261027161224",
+      "./js/examples.js": "./js/examples.js?v=20261027161224",
+      "./js/excel.js": "./js/excel.js?v=20261027161224",
+      "./js/history.js": "./js/history.js?v=20261027161224",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261027161224",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027161224",
+      "./js/lessons.js": "./js/lessons.js?v=20261027161224",
+      "./js/main.js": "./js/main.js?v=20261027161224",
+      "./js/settings.js": "./js/settings.js?v=20261027161224",
+      "./js/storage.js": "./js/storage.js?v=20261027161224",
+      "./js/themes.js": "./js/themes.js?v=20261027161224",
+      "./js/tips.js": "./js/tips.js?v=20261027161224",
+      "./js/training.js": "./js/training.js?v=20261027161224",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261027161224",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261027161224"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261027155935"></script>
+  <script type="module" src="js/main.js?v=20261027161224"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -71,30 +73,62 @@
   <main id="main">
     <section role="tabpanel" id="panel-lernen" aria-labelledby="tab-lernen" tabindex="0" hidden>
      <div id="learn-home">
-      <h2>Das 10-Finger-System</h2>
-      <p>Jeder Finger ist für feste Tasten zuständig. Ausgangspunkt ist die <strong>Grundstellung</strong>:
-        links auf <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>, rechts auf <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>Ö</kbd>,
-        beide Daumen auf der Leertaste. Die kleinen Erhebungen auf <kbd>F</kbd> und <kbd>J</kbd> helfen, die Position blind zu finden.</p>
-      <ul class="tips">
-        <li>Nicht auf die Tastatur schauen – der Blick bleibt auf dem Text.</li>
-        <li>Nach jedem Anschlag kehrt der Finger in die Grundstellung zurück.</li>
-        <li>Aufrecht sitzen, Handgelenke locker, Unterarme etwa waagrecht.</li>
-        <li>Genauigkeit vor Tempo – Geschwindigkeit kommt von allein.</li>
-      </ul>
-
-      <h3>Fingerzuordnung</h3>
-      <p class="hint">Drück ein paar Tasten auf deiner Tastatur – sie leuchten unten mit auf.</p>
-      <div id="keyboard-lernen" class="keyboard-wrap"></div>
-      <ul id="finger-legend" class="legend" aria-label="Legende Fingerfarben"></ul>
-
-      <h3>Lektionen</h3>
-      <p class="hint">Von der Grundreihe bis zu Satzzeichen – jede Lektion hat drei kurze Übungen. Bestanden ab 90 % Genauigkeit. Bei einem Fehler geht es erst mit der richtigen Taste weiter.</p>
-      <div class="data-actions">
+      <h2 class="visually-hidden">Lernen</h2>
+      <div class="learn-bar" role="group" aria-label="Lernfortschritt">
         <button type="button" id="lesson-continue" class="btn primary">Mit Lektion 1 starten</button>
+        <div class="learn-prog">
+          <span id="lesson-progress" role="status">0 von 0 Lektionen</span>
+          <span class="prog-bar" aria-hidden="true"><span id="lesson-bar"></span></span>
+        </div>
+        <nav class="learn-jump" aria-label="Abschnitte">
+          <a href="#learn-lessons">Lektionen</a>
+          <a href="#learn-basics">Grundlagen</a>
+          <a href="#learn-examples">Beispieltexte</a>
+        </nav>
       </div>
-      <p id="lesson-progress" class="hint" role="status"></p>
-      <div id="lesson-list"></div>
-      <button type="button" id="lesson-reset" class="btn danger">Lektionsfortschritt zurücksetzen</button>
+
+      <section id="learn-lessons" class="learn-sec" aria-labelledby="ll-h">
+        <div class="section-head">
+          <h3 id="ll-h" tabindex="-1">Lektionen</h3>
+          <span class="hint">3 Übungen je Lektion · bestanden ab 90 % · bei Fehler erst mit der richtigen Taste weiter</span>
+        </div>
+        <div id="lesson-list"></div>
+      </section>
+
+      <section id="learn-basics" class="learn-sec" aria-labelledby="lb-h">
+        <div class="section-head"><h3 id="lb-h" tabindex="-1">Grundlagen</h3></div>
+        <div class="learn-grid">
+          <div class="learn-card">
+            <h4>Grundstellung</h4>
+            <p>Links auf <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd>, rechts auf <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>Ö</kbd>,
+              beide Daumen auf der Leertaste. Die Erhebungen auf <kbd>F</kbd> und <kbd>J</kbd> helfen, die Position blind zu finden.</p>
+            <ul class="tips compact">
+              <li>Nicht auf die Tastatur schauen.</li>
+              <li>Nach jedem Anschlag zurück in die Grundstellung.</li>
+              <li>Aufrecht sitzen, Handgelenke locker.</li>
+              <li>Genauigkeit vor Tempo.</li>
+            </ul>
+          </div>
+          <div class="learn-card">
+            <h4>Fingerzuordnung</h4>
+            <p class="hint">Drück ein paar Tasten – sie leuchten mit auf.</p>
+            <div id="keyboard-lernen" class="keyboard-wrap"></div>
+            <ul id="finger-legend" class="legend" aria-label="Legende Fingerfarben"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="learn-examples" class="learn-sec" aria-labelledby="le-h">
+        <div class="section-head">
+          <h3 id="le-h" tabindex="-1">Beispieltexte</h3>
+          <span class="hint">Startet im Training als „Eigener Text“.</span>
+        </div>
+        <ul id="example-list" class="example-list"></ul>
+      </section>
+
+      <div class="learn-foot">
+        <button type="button" id="lesson-reset" class="btn danger">Lektionsfortschritt zurücksetzen</button>
+      </div>
      </div>
 
      <div id="lesson-view" hidden>

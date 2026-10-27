@@ -29,6 +29,8 @@ js/caret.js           Weich gleitender Cursor (beobachtet .ch.cur); Tippfeld ein
 js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
+js/examples.js        Lernen-Tab: Beispieltexte (Karten, „Abtippen“ → Training als eigener Text), Sprunglinks
+js/examples-data.js   Beispieltexte (title, level, text) – aktuell Zufallswortlisten als Platzhalter
 js/training.js        Trainingsmodus: Wortliste oder eigener Text, Länge (Zeit/Wörter/eigene), Tipp-Engine, Live-Werte, Session speichern, applyPreset()
 js/dropdown.js        Eigene Dropdowns im App-Design (natives <select> bleibt versteckt als Datenquelle, .value-Setter + MutationObserver halten sie synchron)
 js/wordlists.js       Wortlisten-Katalog (de/en × 100/1k/10k), Laden mit Cache, Längen-Beschriftung
@@ -61,4 +63,5 @@ ES-Module laufen nicht über `file://`. Im Repo-Ordner: `python -m http.server 8
    - ✅ Wörterbuch DE/EN (Top 100/1k/10k), Fokus/Finger entfernt, eigene Länge
    - ✅ Redesign: Glas-Look, 12 Vorlagen + eigene Farben, Effekte, gleitender Cursor, Fokus-Modus
    - ✅ Tipps-Tab: persönliche Empfehlungen (Präzision, Schwachstellen, Tempo-Sprints, Routine, Level-up, blind tippen) mit Direktstart
+   - ✅ Lernen-Tab aufgeräumt: Leiste (Weiter + Fortschrittsbalken + Sprunglinks) → Lektionen → Grundlagen → Beispieltexte
 6. Optional: Accounts/Sync via Supabase (dann Impressum + Datenschutz)

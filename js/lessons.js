@@ -214,11 +214,12 @@ function renderList() {
   const frag = document.createDocumentFragment();
 
   const doneCount = LESSONS.filter((l) => exState(l.id).done).length;
-  $('lesson-progress').textContent = `${doneCount} von ${LESSONS.length} Lektionen abgeschlossen.`;
+  $('lesson-progress').textContent = `${doneCount} von ${LESSONS.length} Lektionen abgeschlossen`;
+  $('lesson-bar').style.width = `${(doneCount / LESSONS.length) * 100}%`;
   const cont = $('lesson-continue');
   cont.hidden = !next;
   if (next) {
-    cont.textContent = doneCount ? `Weiter mit Lektion ${ctxById.get(next.id).index + 1}` : 'Mit Lektion 1 starten';
+    cont.textContent = doneCount ? `Weiter mit Lektion ${ctxById.get(next.id).index + 1} →` : 'Mit Lektion 1 starten →';
     cont.onclick = () => openLesson(next.id);
   }
 
@@ -226,7 +227,12 @@ function renderList() {
     const items = LESSONS.filter((l) => l.group === gid);
     if (!items.length) continue;
     const h = document.createElement('h4');
+    const gDone = items.filter((l) => exState(l.id).done).length;
     h.textContent = gname;
+    const cnt = document.createElement('span');
+    cnt.className = 'g-count' + (gDone === items.length ? ' full' : '');
+    cnt.textContent = `${gDone}/${items.length}`;
+    h.append(cnt);
     const ol = document.createElement('ol');
     ol.className = 'lesson-list';
     for (const l of items) {
