@@ -479,14 +479,14 @@ function showResult(r, passed, lessonJustDone) {
 let tabArmed = false;
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return;
-  // Tab + Leertaste = Neustart (2× Tab = normal weiter zu den Buttons)
+  // Tab + Enter = Neustart (2× Tab = normal weiter zu den Buttons)
   if (e.key === 'Tab' && !e.shiftKey && !e.altKey) {
     if (tabArmed) { tabArmed = false; return; }
     e.preventDefault(); tabArmed = true; return;
   }
   if (tabArmed) {
     tabArmed = false;
-    if (e.key === ' ') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
+    if (e.key === 'Enter') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
   }
   if (e.key === 'Escape') { e.preventDefault(); startExercise(cur.ex); box.focus(); return; }
   if (s.done) {

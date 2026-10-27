@@ -417,7 +417,7 @@ function showResult(r) {
 
   const note = document.createElement('p');
   note.className = 'hint';
-  note.textContent = 'Neue Runde: Tab + Leertaste oder Esc. Gespeichert im Verlauf (nur lokal in diesem Browser).';
+  note.textContent = 'Neue Runde: Tab + Enter oder Esc. Gespeichert im Verlauf (nur lokal in diesem Browser).';
 
   out.replaceChildren(h, dl, weakP, btn, note);
   out.hidden = false;
@@ -427,14 +427,14 @@ function showResult(r) {
 let tabArmed = false;
 function onKey(e) {
   if (e.metaKey || (e.ctrlKey && !e.altKey)) return; // Browser-Kürzel nicht abfangen
-  // Tab + Leertaste = Neustart (2× Tab = normal weiter zu den Buttons)
+  // Tab + Enter = Neustart (2× Tab = normal weiter zu den Buttons)
   if (e.key === 'Tab' && !e.shiftKey && !e.altKey) {
     if (tabArmed) { tabArmed = false; return; }
     e.preventDefault(); tabArmed = true; return;
   }
   if (tabArmed) {
     tabArmed = false;
-    if (e.key === ' ') { e.preventDefault(); reset(); box.focus(); return; }
+    if (e.key === 'Enter') { e.preventDefault(); reset(); box.focus(); return; }
   }
   if (e.key === 'Escape') { e.preventDefault(); reset(); box.focus(); return; }
   if (s.done) {

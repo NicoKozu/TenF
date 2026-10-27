@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261027152619">
+  <link rel="stylesheet" href="css/style.css?v=20261027153047">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,24 +31,24 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261027152619",
-      "./js/excel.js": "./js/excel.js?v=20261027152619",
-      "./js/history.js": "./js/history.js?v=20261027152619",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261027152619",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027152619",
-      "./js/lessons.js": "./js/lessons.js?v=20261027152619",
-      "./js/main.js": "./js/main.js?v=20261027152619",
-      "./js/settings.js": "./js/settings.js?v=20261027152619",
-      "./js/storage.js": "./js/storage.js?v=20261027152619",
-      "./js/themes.js": "./js/themes.js?v=20261027152619",
-      "./js/tips.js": "./js/tips.js?v=20261027152619",
-      "./js/training.js": "./js/training.js?v=20261027152619",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261027152619",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261027152619"
+      "./js/caret.js": "./js/caret.js?v=20261027153047",
+      "./js/excel.js": "./js/excel.js?v=20261027153047",
+      "./js/history.js": "./js/history.js?v=20261027153047",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261027153047",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027153047",
+      "./js/lessons.js": "./js/lessons.js?v=20261027153047",
+      "./js/main.js": "./js/main.js?v=20261027153047",
+      "./js/settings.js": "./js/settings.js?v=20261027153047",
+      "./js/storage.js": "./js/storage.js?v=20261027153047",
+      "./js/themes.js": "./js/themes.js?v=20261027153047",
+      "./js/tips.js": "./js/tips.js?v=20261027153047",
+      "./js/training.js": "./js/training.js?v=20261027153047",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261027153047",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261027153047"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261027152619"></script>
+  <script type="module" src="js/main.js?v=20261027153047"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -116,7 +116,7 @@
         <div class="typing-view"><div id="lv-text" class="typing-text"></div></div>
       </div>
       <div id="lv-result" class="result" role="status" hidden></div>
-      <p class="hint">Neustart: Tab + Leertaste (oder Esc). Gedimmte Tasten kommen erst in späteren Lektionen, umrandete sind neu.</p>
+      <p class="hint">Neustart: Tab + Enter (oder Esc). Gedimmte Tasten kommen erst in späteren Lektionen, umrandete sind neu.</p>
       <div id="keyboard-lesson" class="keyboard-wrap"></div>
      </div>
     </section>
@@ -163,7 +163,7 @@
         </div>
         <label class="check words-only"><input type="checkbox" id="ts-caps"> Großschreibung</label>
         <label class="check"><input type="checkbox" id="ts-strict"> Bei Fehler stoppen</label>
-        <button type="button" id="ts-restart" class="btn">Neu starten (Tab + Leertaste)</button>
+        <button type="button" id="ts-restart" class="btn">Neu starten (Tab + Enter)</button>
         <div id="ts-custom-wrap" class="custom-wrap" hidden>
           <label for="ts-custom">Dein Text</label>
           <textarea id="ts-custom" rows="4" maxlength="5000" spellcheck="false"
