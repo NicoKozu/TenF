@@ -49,12 +49,6 @@ export function applyDesign() {
   root.dataset.smooth = f.smooth ? '1' : '0';
   saveSettings({ cache: { light, dark, bg: f.bg, caret: f.caret, smooth: f.smooth } });
 
-  const name = id === 'system' ? 'System' : id === 'custom' ? 'Eigenes' : PRESETS[id].name;
-  const btn = $('theme-toggle');
-  if (btn) {
-    btn.setAttribute('aria-label', `Design: ${name} (klicken für nächstes Design)`);
-    btn.title = `Design: ${name}`;
-  }
   syncDesignUi();
   window.dispatchEvent(new Event('themechange'));
 }
@@ -265,11 +259,6 @@ export function initSettings() {
   applySizes();
   applyKbHide(cfg.hideTrainKb);
 
-  // Kopfzeilen-Knopf: Vorlagen der Reihe nach durchschalten
-  $('theme-toggle').addEventListener('click', () => {
-    const keys = ['system', ...Object.keys(PRESETS)];
-    setTheme(keys[(keys.indexOf(themeId()) + 1) % keys.length]);
-  });
   darkMq.addEventListener('change', () => { if (themeId() === 'system') applyDesign(); });
 
   // Größen: live anwenden, beim Loslassen speichern
