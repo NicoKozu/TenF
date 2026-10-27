@@ -508,11 +508,16 @@ input[type="range"]:focus-visible::-moz-range-thumb { outline: 2px solid var(--a
 
 .next-key { min-height: 1.6em; margin: .6rem 0 .8rem; text-align: center; }
 
-/* Fokus-Modus: beim Tippen bleiben nur Text und Restzeit bzw. Wörter (x/n) sichtbar */
-#panel-training > h2, .list-src, .stat, #keyboard-training { transition: opacity .3s var(--ease); }
-body:has(.typing-box.running:focus) :is(.site-header, .train-settings, .site-footer, #panel-training > h2, .list-src, .stat, #keyboard-training) { opacity: 0; pointer-events: none; }
+/* Fokus-Modus: beim Tippen nur Text, darüber mittig Restzeit bzw. Wörter (x/n) */
+body:has(.typing-box.running:focus) :is(.site-header, .train-settings, .site-footer, #panel-training > h2, .list-src, .stat, #keyboard-training) { display: none; }
+body:has(.typing-box.running:focus) #panel-training { padding-top: 22vh; }
+body:has(.typing-box.running:focus) .stats { display: flex; justify-content: center; margin-bottom: .75rem; }
 body:has(.typing-box.running:focus) #panel-training:not([data-len="w"]) #st-time-wrap,
-body:has(.typing-box.running:focus) #panel-training[data-len="w"] #st-words-wrap { opacity: 1; }
+body:has(.typing-box.running:focus) #panel-training[data-len="w"] #st-words-wrap {
+  display: flex; align-items: center;
+  background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+body:has(.typing-box.running:focus) .stat .stat-lbl { display: none; }
 
 .result {
   position: relative; overflow: hidden;
