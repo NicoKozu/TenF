@@ -30,6 +30,7 @@ js/keyboard.js        Virtuelle Tastatur, Fingerzuordnung, Hervorhebung
 js/lessons.js         Lektionen: Übersicht, Ansicht, Textgenerator, Tipp-Engine (stoppt bei Fehler)
 js/lessons-data.js    Lektionsdefinitionen (id stabil, kind, keys, intro, words)
 js/training.js        Trainingsmodus: Wortliste oder eigener Text, Länge (Zeit/Wörter/eigene), Tipp-Engine, Live-Werte, Session speichern, applyPreset()
+js/dropdown.js        Eigene Dropdowns im App-Design (natives <select> bleibt versteckt als Datenquelle, .value-Setter + MutationObserver halten sie synchron)
 js/wordlists.js       Wortlisten-Katalog (de/en × 100/1k/10k), Laden mit Cache, Längen-Beschriftung
 js/tips.js            Tipps: regelbasierte Empfehlungen aus dem Verlauf (keine KI), Prioritäten, Quellen; Buttons setzen Training per applyPreset()
 js/history.js         Verlauf: Kennzahlen, Diagramm, Schwachstellen/Heatmap, Tabelle, Export/Import

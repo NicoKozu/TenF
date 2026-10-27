@@ -2,6 +2,7 @@
 import { createKeyboard, keyForChar, labelForCode, fingerForCode, FINGERS } from './keyboard.js';
 import { getSettings, saveSettings, addSession } from './storage.js';
 import { LISTS, LANG_NAMES, DEFAULT_LIST, loadList } from './wordlists.js';
+import { enhanceSelects } from './dropdown.js';
 
 const DEFAULTS = {
   source: 'words', list: DEFAULT_LIST, length: 't60', customLen: { n: 2, unit: 'min' },
@@ -31,6 +32,7 @@ export async function initTraining() {
   kb = createKeyboard($('keyboard-training'));
   setupForm();
   bindEvents();
+  enhanceSelects(document.querySelectorAll('#train-settings select'));
   await useList(cfg.list);
   // Sofort lostippen: Fokus direkt ins Tippfeld, wenn Training offen ist
   if (!panel.hidden && (document.activeElement === document.body || !document.activeElement)) box.focus({ preventScroll: true });
