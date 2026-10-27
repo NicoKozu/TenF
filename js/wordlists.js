@@ -1,13 +1,13 @@
 // Wortlisten aus data/dict/ (häufigste Wörter je Sprache). Werden erst bei Bedarf geladen.
 
-const LANGS = { de: 'Deutsch', en: 'Englisch' };
+const LANGS = { de: 'German', en: 'English' };
 const SIZES = [100, 1000, 10000];
 const fmt = (n) => n.toLocaleString('de-DE');
 
 /** { 'de-1000': { lang, size, name, file } } */
 export const LISTS = Object.fromEntries(
   Object.entries(LANGS).flatMap(([lang, name]) => SIZES.map((size) => [`${lang}-${size}`, {
-    lang, size, name: `${name} – Top ${fmt(size)}`, file: `data/dict/${lang}/top-${size}.json`,
+    lang, size, name: `${name} ${fmt(size)}`, file: `data/dict/${lang}/top-${size}.json`,
   }])),
 );
 export const DEFAULT_LIST = 'de-1000';

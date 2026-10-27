@@ -1,7 +1,7 @@
 // Trainingsmodus: Wörter aus einer Wortliste abtippen, Live-Auswertung, Session speichern.
 import { createKeyboard, keyForChar, labelForCode, fingerForCode, FINGERS } from './keyboard.js';
 import { getSettings, saveSettings, addSession } from './storage.js';
-import { LISTS, LANG_NAMES, DEFAULT_LIST, loadList } from './wordlists.js';
+import { LISTS, DEFAULT_LIST, loadList } from './wordlists.js';
 import { enhanceSelects } from './dropdown.js';
 
 const DEFAULTS = {
@@ -53,14 +53,7 @@ async function useList(id) {
 // ----- Einstellungen -----
 function setupForm() {
   const list = $('ts-list');
-  for (const [lang, name] of Object.entries(LANG_NAMES)) {
-    const group = document.createElement('optgroup');
-    group.label = name;
-    for (const [id, l] of Object.entries(LISTS)) {
-      if (l.lang === lang) group.append(new Option(l.name, id));
-    }
-    list.append(group);
-  }
+  for (const [id, l] of Object.entries(LISTS)) list.append(new Option(l.name, id));
   const set = (id, val, def) => {
     const el = $(id);
     el.value = val;
