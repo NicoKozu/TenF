@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TenF – Zehnfinger-Trainer</title>
   <meta name="description" content="10-Finger-Schreiben von Null lernen und trainieren – kostenlos, ohne Anmeldung, ohne Tracking.">
-  <link rel="stylesheet" href="css/style.css?v=20261027152238">
+  <link rel="stylesheet" href="css/style.css?v=20261027152409">
   <meta name="color-scheme" content="dark light">
   <script>
     // Design (Farben + Effekte) und Größen vor dem ersten Zeichnen setzen (kein Aufblitzen)
@@ -31,24 +31,24 @@
   <script type="importmap">
   {
     "imports": {
-      "./js/caret.js": "./js/caret.js?v=20261027152238",
-      "./js/excel.js": "./js/excel.js?v=20261027152238",
-      "./js/history.js": "./js/history.js?v=20261027152238",
-      "./js/keyboard.js": "./js/keyboard.js?v=20261027152238",
-      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027152238",
-      "./js/lessons.js": "./js/lessons.js?v=20261027152238",
-      "./js/main.js": "./js/main.js?v=20261027152238",
-      "./js/settings.js": "./js/settings.js?v=20261027152238",
-      "./js/storage.js": "./js/storage.js?v=20261027152238",
-      "./js/themes.js": "./js/themes.js?v=20261027152238",
-      "./js/tips.js": "./js/tips.js?v=20261027152238",
-      "./js/training.js": "./js/training.js?v=20261027152238",
-      "./js/wordlists.js": "./js/wordlists.js?v=20261027152238",
-      "./js/xlsx.js": "./js/xlsx.js?v=20261027152238"
+      "./js/caret.js": "./js/caret.js?v=20261027152409",
+      "./js/excel.js": "./js/excel.js?v=20261027152409",
+      "./js/history.js": "./js/history.js?v=20261027152409",
+      "./js/keyboard.js": "./js/keyboard.js?v=20261027152409",
+      "./js/lessons-data.js": "./js/lessons-data.js?v=20261027152409",
+      "./js/lessons.js": "./js/lessons.js?v=20261027152409",
+      "./js/main.js": "./js/main.js?v=20261027152409",
+      "./js/settings.js": "./js/settings.js?v=20261027152409",
+      "./js/storage.js": "./js/storage.js?v=20261027152409",
+      "./js/themes.js": "./js/themes.js?v=20261027152409",
+      "./js/tips.js": "./js/tips.js?v=20261027152409",
+      "./js/training.js": "./js/training.js?v=20261027152409",
+      "./js/wordlists.js": "./js/wordlists.js?v=20261027152409",
+      "./js/xlsx.js": "./js/xlsx.js?v=20261027152409"
     }
   }
   </script>
-  <script type="module" src="js/main.js?v=20261027152238"></script>
+  <script type="module" src="js/main.js?v=20261027152409"></script>
 </head>
 <body>
   <div class="backdrop" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -179,7 +179,7 @@
       <p id="ts-list-src" class="hint list-src words-only-hint">Wortlisten: die häufigsten Wörter aus dem OpenSubtitles-Korpus (<a href="https://github.com/hermitdave/FrequencyWords" rel="noopener">FrequencyWords</a>, CC BY-SA 4.0), auf Rechtschreibung geprüft – ohne Namen und Vulgäres.</p>
 
       <div class="stats" role="group" aria-label="Live-Werte">
-        <div class="stat"><span class="stat-val" id="st-time">1:00</span><span class="stat-lbl" id="st-time-lbl">Restzeit</span></div>
+        <div class="stat" id="st-time-wrap"><span class="stat-val" id="st-time">1:00</span><span class="stat-lbl" id="st-time-lbl">Restzeit</span></div>
         <div class="stat" id="st-words-wrap" hidden><span class="stat-val" id="st-words">0</span><span class="stat-lbl">Wörter</span></div>
         <div class="stat"><span class="stat-val" id="st-wpm">–</span><span class="stat-lbl">WPM</span></div>
         <div class="stat"><span class="stat-val" id="st-acc">–</span><span class="stat-lbl">Genauigkeit</span></div>

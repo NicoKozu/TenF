@@ -212,6 +212,7 @@ function reset() {
     appendWords(type === 'w' ? n : 40);
   }
   $('st-words-wrap').hidden = type !== 'w';
+  $('panel-training').dataset.len = type;
   $('train-result').replaceChildren();
   $('train-result').hidden = true;
   box.classList.remove('running', 'done');
